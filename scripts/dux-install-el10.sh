@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #
-# dank-install-el10.sh - unofficial installer for DankMaterialShell on
-# CentOS Stream 10 / RHEL 10 / EPEL10, modeled on AvengeMedia's own
-# `dankinstall` (curl -fsSL https://install.danklinux.com | sh) which does
+# dux-install-el10.sh - unofficial installer for Dux Shell on
+# CentOS Stream 10 / RHEL 10 / EPEL10, modeled on Dux Labs' own
+# `dankinstall` (curl -fsSL https://install.duxlabs.dev | sh) which does
 # not support RHEL/CentOS at all today.
 #
 # Flag-driven only (v1) - no interactive menu, mirrors dankinstall's
 # documented headless mode: `-c niri -t ghostty -y`.
 #
-# Sources used, per kmf/dank-ws-copr's PLAN.md/SETUP.md:
+# Sources used, per kmf/dux-ws-copr's PLAN.md/SETUP.md:
 #   - avengemedia/danklinux COPR : quickshell, matugen, cliphist, danksearch,
 #                                  dgop, dankcalendar-git, dms-greeter (all
 #                                  confirmed working on el10 unmodified)
@@ -17,7 +17,7 @@
 #                                  avengemedia/dms el10 builds exist yet)
 #   - yalter/niri COPR           : niri (confirmed installs cleanly on el10
 #                                  as-is; we do not fork it)
-#   - kmf/dank-ws-copr           : everything we had to fork/build ourselves
+#   - kmf/dux-ws-copr           : everything we had to fork/build ourselves
 #                                  (hyprland, mir, miracle-wm, ghostty,
 #                                  greetd + its rust crate chain, cava, and
 #                                  the hyprland dependency chain)
@@ -53,7 +53,7 @@ ASSUME_YES=0
 DRY_RUN=0
 FORCE=0
 
-OUR_COPR="kmf/dank-ws-copr"
+OUR_COPR="kmf/dux-ws-copr"
 DANKLINUX_COPR="avengemedia/danklinux"
 DMS_COPR="avengemedia/dms-git"
 NIRI_COPR="yalter/niri"
@@ -64,7 +64,7 @@ GREETER_PACKAGE="dms-greeter"
 # `dms doctor` optional-feature checks - kf6-kimageformats ships straight from
 # EPEL (dms doctor looks for the plain "kimageformats" name, but the actual
 # el10 package is kf6-kimageformats - KF6, distinct from the already-present
-# qt6-imageformats); cava is forked into kmf/dank-ws-copr (specs/cava/).
+# qt6-imageformats); cava is forked into kmf/dux-ws-copr (specs/cava/).
 OPTIONAL_PACKAGES=(kf6-kimageformats cava)
 
 # ---------------------------------------------------------------------------
@@ -89,10 +89,10 @@ run() {
 
 usage() {
     cat <<'EOF'
-dank-install-el10.sh - install DankMaterialShell on CentOS Stream 10 / RHEL 10
+dux-install-el10.sh - install Dux Shell on CentOS Stream 10 / RHEL 10
 
 Usage:
-  dank-install-el10.sh [options]
+  dux-install-el10.sh [options]
 
 Options:
   -c, --compositor NAME   Compositor to install: niri (default), hyprland, miracle-wm
@@ -108,13 +108,13 @@ Options:
 
 Examples:
   # headless, matches upstream dankinstall's flag style
-  sudo -v && ./dank-install-el10.sh -c niri -t ghostty -y
+  sudo -v && ./dux-install-el10.sh -c niri -t ghostty -y
 
   # Hyprland instead, with kitty
-  ./dank-install-el10.sh -c hyprland -t kitty -y
+  ./dux-install-el10.sh -c hyprland -t kitty -y
 
   # interactive menu (also runs automatically with no arguments)
-  ./dank-install-el10.sh --menu
+  ./dux-install-el10.sh --menu
 EOF
 }
 
@@ -158,7 +158,7 @@ confirm() {
 }
 
 run_menu() {
-    green "== dank-install-el10 interactive setup =="
+    green "== dux-install-el10 interactive setup =="
 
     COMPOSITOR=$(choose "Choose a compositor:" niri hyprland miracle-wm)
     TERMINAL=$(choose "Choose a terminal:" ghostty kitty alacritty)
@@ -280,13 +280,13 @@ if [ "$COMPOSITOR" = "hyprland" ] && [ "$FORCE" != "1" ]; then
         red "Known conflict: --compositor hyprland requires our rebuilt lua-5.5, which"
         red "collides with el10's stock lua-libs 5.4, a dependency of: ${conflicting[*]}"
         red "This is a documented, unresolved packaging issue (see specs/lua/lua.spec and"
-        red "PLAN.md in kmf/dank-ws-copr). Re-run with --force to proceed anyway, or pick"
+        red "PLAN.md in kmf/dux-ws-copr). Re-run with --force to proceed anyway, or pick"
         red "--compositor niri or --compositor miracle-wm instead."
         exit 1
     fi
 fi
 
-green "Installing DankMaterialShell for el10: compositor=$COMPOSITOR terminal=$TERMINAL"
+green "Installing Dux Shell for el10: compositor=$COMPOSITOR terminal=$TERMINAL"
 
 # ---------------------------------------------------------------------------
 # Repos

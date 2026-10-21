@@ -1,20 +1,20 @@
-# dank-ws-copr
+# dux-ws-copr
 
 <div align="center">
 
-  ### DankMaterialShell packages for CentOS Stream 10 / RHEL 10 / EPEL10
+  ### Dux Shell packages for CentOS Stream 10 / RHEL 10 / EPEL10
 
   Compositors, terminal, and the full dependency chain — built with [COPR](https://copr.fedorainfracloud.org/)
 
-[![COPR Build](https://img.shields.io/badge/COPR-kmf%2Fdank--ws--copr-73ba25?labelColor=101418)](https://copr.fedorainfracloud.org/coprs/kmf/dank-ws-copr/)
+[![COPR Build](https://img.shields.io/badge/COPR-kmf%2Fdux--ws--copr-73ba25?labelColor=101418)](https://copr.fedorainfracloud.org/coprs/kmf/dux-ws-copr/)
 [![CentOS Stream 10](https://img.shields.io/badge/CentOS_Stream-10-262577?labelColor=101418)](https://www.centos.org/centos-stream/)
 [![License](https://img.shields.io/badge/license-various-b9c8da?labelColor=101418)](specs/NOTICE.md)
 
 </div>
 
-[AvengeMedia's `danklinux`](https://github.com/AvengeMedia/danklinux) packages DankMaterialShell for
+[Dux Labs' `dux-packaging`](https://github.com/duxlabs-dev/dux-packaging) packages Dux Shell for
 Debian, Ubuntu, Fedora, and openSUSE. This repo covers the distro they don't: CentOS Stream 10 /
-RHEL 10 / EPEL10. Where AvengeMedia's own COPR (`avengemedia/danklinux`, `avengemedia/dms-git`)
+RHEL 10 / EPEL10. Where Dux Labs' own COPR (`avengemedia/danklinux`, `avengemedia/dms-git`)
 already has working el10 builds, we consume those directly — this repo only exists to fill the real
 gaps: compositors and dependency chains that needed forking, patching, or building entirely from
 scratch to work on el10.
@@ -81,34 +81,34 @@ scratch to work on el10.
 
 ### One-line install script
 
-[`scripts/dank-install-el10.sh`](scripts/dank-install-el10.sh) is an unofficial equivalent of
-AvengeMedia's own `dankinstall` (`curl -fsSL https://install.danklinux.com | sh`), which doesn't
+[`scripts/dux-install-el10.sh`](scripts/dux-install-el10.sh) is an unofficial equivalent of
+Dux Labs' own `dankinstall` (`curl -fsSL https://install.duxlabs.dev | sh`), which doesn't
 support RHEL/CentOS at all. It enables the right repos, installs your chosen compositor and
 terminal, deploys DMS's compositor config integration (`dms setup headless`), sets up `dms` +
 `dms-greeter`, and enables the DMS systemd user service.
 
 ```bash
-curl -fsSL -o dank-install-el10.sh https://raw.githubusercontent.com/kmf/dank-ws-copr/main/scripts/dank-install-el10.sh
-chmod +x dank-install-el10.sh
+curl -fsSL -o dux-install-el10.sh https://raw.githubusercontent.com/kmf/dux-ws-copr/main/scripts/dux-install-el10.sh
+chmod +x dux-install-el10.sh
 
 # headless, matches upstream dankinstall's flag style
-sudo -v && ./dank-install-el10.sh -c niri -t ghostty -y
+sudo -v && ./dux-install-el10.sh -c niri -t ghostty -y
 
 # or run with no arguments for an interactive menu
-./dank-install-el10.sh
+./dux-install-el10.sh
 ```
 
 ### Manual installation (CentOS Stream 10 / RHEL 10)
 
 ```bash
-# 1. Dependencies (EPEL + CRB, plus AvengeMedia's own working el10 repos)
+# 1. Dependencies (EPEL + CRB, plus Dux Labs' own working el10 repos)
 sudo dnf install -y epel-release
 sudo dnf config-manager --set-enabled crb
 sudo dnf copr enable -y avengemedia/danklinux
 sudo dnf copr enable -y avengemedia/dms-git
 
-# 2. This repo, for everything AvengeMedia doesn't build for el10
-sudo dnf copr enable -y kmf/dank-ws-copr
+# 2. This repo, for everything Dux Labs doesn't build for el10
+sudo dnf copr enable -y kmf/dux-ws-copr
 
 # 3. Core shell
 sudo dnf install -y quickshell-git matugen cliphist danksearch dgop dankcalendar-git dms
@@ -140,7 +140,7 @@ systemctl --user enable --now dms
 > **Known issue**: `hyprland` depends on our rebuilt `lua` 5.5, which conflicts with el10's stock
 > `lua-libs` 5.4 — a real dependency of `wireplumber-libs` and `ibus-libpinyin`. See
 > [`specs/lua/lua.spec`](specs/lua/lua.spec) and `PLAN.md`'s Known Blockers table. Not yet resolved;
-> `dank-install-el10.sh` refuses to install hyprland if it detects either package unless `--force`
+> `dux-install-el10.sh` refuses to install hyprland if it detects either package unless `--force`
 > is passed.
 
 ## Architecture Support
@@ -151,9 +151,9 @@ systemctl --user enable --now dms
 
 ## Upstream Projects
 
-- [DankMaterialShell](https://github.com/AvengeMedia/DankMaterialShell) — DMS desktop environment
-- [danklinux](https://github.com/AvengeMedia/danklinux) — DMS packages for Debian/Ubuntu/Fedora/openSUSE (the repo this one complements)
-- [dank-greeter](https://github.com/AvengeMedia/dank-greeter) — greetd greeter (`dms-greeter`)
+- [Dux Shell](https://github.com/duxlabs-dev/dux-shell) — DMS desktop environment
+- [dux-packaging](https://github.com/duxlabs-dev/dux-packaging) — DMS packages for Debian/Ubuntu/Fedora/openSUSE (the repo this one complements)
+- [dux-greeter](https://github.com/duxlabs-dev/dux-greeter) — greetd greeter (`dms-greeter`)
 - [Hyprland](https://github.com/hyprwm/Hyprland) — dynamic tiling Wayland compositor
 - [Mir](https://github.com/canonical/mir) / [miracle-wm](https://github.com/miracle-wm-org/miracle-wm) — Mir-based tiling compositor
 - [mango (mangowm)](https://github.com/mangowm/mango) — dwl-based compositor with eye-candy effects
@@ -163,7 +163,7 @@ systemctl --user enable --now dms
 
 ## Build Status
 
-- **COPR**: [kmf/dank-ws-copr](https://copr.fedorainfracloud.org/coprs/kmf/dank-ws-copr/), targeting `centos-stream-10-x86_64`, `epel-10-x86_64` (the chroot a real `dnf copr enable` actually auto-detects on this distro family — see [TESTING.md](TESTING.md)), and their aarch64 equivalents
+- **COPR**: [kmf/dux-ws-copr](https://copr.fedorainfracloud.org/coprs/kmf/dux-ws-copr/), targeting `centos-stream-10-x86_64`, `epel-10-x86_64` (the chroot a real `dnf copr enable` actually auto-detects on this distro family — see [TESTING.md](TESTING.md)), and their aarch64 equivalents
 - **Dependencies (Tiers 1–3)**: [avengemedia/danklinux](https://copr.fedorainfracloud.org/coprs/avengemedia/danklinux/), [avengemedia/dms-git](https://copr.fedorainfracloud.org/coprs/avengemedia/dms-git/)
 - **niri**: [yalter/niri](https://copr.fedorainfracloud.org/coprs/yalter/niri/) (upstream, not built here)
 
@@ -173,7 +173,7 @@ Packaging specs and automation maintained in this repository. Every fork/adaptat
 third-party spec carries a header comment naming its exact source and what was changed; see
 [`specs/NOTICE.md`](specs/NOTICE.md) for the full attribution index.
 
-- **Packaging issues**: [GitHub Issues](https://github.com/kmf/dank-ws-copr/issues)
+- **Packaging issues**: [GitHub Issues](https://github.com/kmf/dux-ws-copr/issues)
 - **Upstream bugs**: report to the respective project repositories above
 
 ## License

@@ -1,30 +1,30 @@
-# Dank Material Shell — CentOS Stream 10 Packaging
+# Dux Shell — CentOS Stream 10 Packaging
 
 ## Goal — the actual deliverable, stated plainly
 The end goal is **not** "have working spec files somewhere" — it's a real, live **COPR repo
-(`kmf/dank-ws-copr`)** that any CentOS Stream 10 machine can add and install DMS + its dependency
+(`kmf/dux-ws-copr`)** that any CentOS Stream 10 machine can add and install DMS + its dependency
 chain from, the same way one would `dnf copr enable avengemedia/danklinux` today. Concretely, done
 looks like:
 
 ```
-dnf copr enable kmf/dank-ws-copr
+dnf copr enable kmf/dux-ws-copr
 dnf install dms dms-greeter quickshell   # (and whatever else has been ported)
 ```
 actually working on a fresh CentOS Stream 10 box — not just "the SRPM built in a local mock chroot
 on durin". Everything else in this doc (the dependency tree, the blockers table, the fork-vs-adopt
 decision on Terra) is in service of that one artifact.
 
-**Where things stand**: as of 2026-09-24, `specs/` in this repo (`kmf/dank-ws-copr`, currently local
+**Where things stand**: as of 2026-09-24, `specs/` in this repo (`kmf/dux-ws-copr`, currently local
 to `durin` only — see below) holds 6 forked/adapted spec packages, each individually verified via a
 real `mock` build + `dnf install` + smoke test (not just written and hoped): `gtk4-layer-shell`,
 `rust-pam-sys`, `rust-enquote`, `rust-greetd_ipc`, `rust-rpassword5`, `greetd`. **None of this is
 live yet** — there is no GitHub repo pushed, no COPR project created, and no CI wiring. The
 verification so far proves the specs *work*, not that the end-to-end distribution goal is met.
 Turning this into the actual artifact needs, roughly in order:
-1. ✅ **Done 2026-09-24**: pushed to a real `kmf/dank-ws-copr` GitHub repo — public, live at
-   https://github.com/kmf/dank-ws-copr. (SSH auth to GitHub as `kmf` needed `github.com`'s host key
+1. ✅ **Done 2026-09-24**: pushed to a real `kmf/dux-ws-copr` GitHub repo — public, live at
+   https://github.com/kmf/dux-ws-copr. (SSH auth to GitHub as `kmf` needed `github.com`'s host key
    added to `known_hosts` first — one-time setup, see SETUP.md Step 12.)
-2. Create the actual `kmf/dank-ws-copr` COPR project (copr.fedorainfracloud.org), pointed at that
+2. Create the actual `kmf/dux-ws-copr` COPR project (copr.fedorainfracloud.org), pointed at that
    GitHub repo, targeting CentOS Stream 10 (+ EPEL as a dependency source, per below). `copr-cli`
    is now installed on `durin`, but **needs an API token tied to your Fedora Account** (generate at
    copr.fedorainfracloud.org/api/ once logged in, then `copr-cli` picks it up from
@@ -34,10 +34,10 @@ Turning this into the actual artifact needs, roughly in order:
    locally on `durin`'s mock — COPR's chroot/mock config should match, but this hasn't been
    confirmed with a real COPR build yet.
 5. ✅ **Done 2026-09-27, re-confirmed 2026-09-29–30 on genuinely separate machines**: validated the
-   actual `dnf copr enable kmf/dank-ws-copr && dnf install ...` flow — found and fixed a real
+   actual `dnf copr enable kmf/dux-ws-copr && dnf install ...` flow — found and fixed a real
    chroot-detection bug in the process (see "Repos to Enable on `durin`" below). Re-validated on a
    clean `quay.io/centos/centos:stream10` container with zero state inherited from `durin`: `dnf
-   copr enable` and the full published `dank-install-el10.sh` install both succeeded, every
+   copr enable` and the full published `dux-install-el10.sh` install both succeeded, every
    expected package landed correctly. Then installed `qemu-kvm`/`libvirt`/`virt-install` on `durin`
    specifically to close the container's remaining gap (no real systemd PID1 or GPU) and ran a real
    KVM VM (official CentOS Stream 10 cloud image, not derived from `durin`'s disk): booted
@@ -47,7 +47,7 @@ Turning this into the actual artifact needs, roughly in order:
    libvirt didn't) — see TESTING.md's "Full VM boot-to-login test" section for the complete
    root-cause trail and fix.
 
-- Repo: `gh kmf/dank-ws-copr` (**local git repo only so far — not yet pushed to GitHub**)
+- Repo: `gh kmf/dux-ws-copr` (**local git repo only so far — not yet pushed to GitHub**)
 - Build host: `durin` (Tailscale-connected, CentOS Stream 10) — used for spec development and
   local `mock` verification; the actual COPR builds happen on Copr's own infrastructure once step 2
   above is done, not on `durin` itself
@@ -97,7 +97,7 @@ Treat Tier 4 as install-time choices, not a monolithic build requirement — DMS
   but the real package on el10 is `kf6-kimageformats` (KF6, not the unrelated `qt6-imageformats`
   which is separate and already installed) — already ships directly in **EPEL** (`6.30.0-1.el10_4`),
   confirmed via `dnf install kf6-kimageformats`. Just an install-time step, not a packaging gap.
-- `cava` — ✅ forked into `kmf/dank-ws-copr` (`specs/cava/`), real COPR build succeeded (11031735).
+- `cava` — ✅ forked into `kmf/dux-ws-copr` (`specs/cava/`), real COPR build succeeded (11031735).
   Unmodified from Fedora rawhide's spec (no epel9/epel10 branch existed there); all its
   BuildRequires (alsa-lib-devel, fftw-devel, pulseaudio-libs-devel, ncurses-devel, iniparser-devel)
   are already on el10 BaseOS/AppStream/CRB, so no dependency chain to chase.
@@ -135,7 +135,7 @@ commands/output. Several original entries were stale._
 | greetd | ✅ **RESOLVED — built, installed, and verified working.** Forked from Fedora rawhide (unbranched for EPEL, not broken/unported). Needed 4 supporting crate packages forked the same way, all also just unbranched Fedora packages: `rust-pam-sys`, `rust-enquote`, `rust-greetd_ipc` (path-dep quirk in cargo2rpm's BR generation), `rust-rpassword5` (greetd's Cargo.lock pins an old major version). Real mock build succeeded, real `dnf install` succeeded, `rpm -V`/`ldd`/`greetd --help` all clean. **Confirmed the original hard blocker is gone**: `sudo dnf install --assumeno dms-greeter` now resolves cleanly end-to-end. See SETUP.md Step 11 for the full trail. | Done — upload these 6 specs to the actual COPR (see restated Goal below) |
 | ghostty | ✅ **RESOLVED — built, installed, and verified working.** `gtk4-layer-shell` (forked from Fedora rawhide) unblocked the dependency gap; the deeper Zig `--system`-mode issue (six C dependencies including `harfbuzz` all silently flip their "prefer system vs. vendored" default under offline mode, not just the one the error message named) was isolated via a real network-enabled host build vs. an isolated `--system`-mode repro, then fixed by passing `-fno-sys=` for the full set of six. Also found and fixed a second, unrelated real bug along the way: `%{evr}` isn't a defined macro on el10 at all — it was silently baking the literal string into built RPMs' dependency metadata, making every ghostty subpackage genuinely uninstallable. Real mock build succeeded (17 RPMs), real `dnf install` succeeded, `rpm -V`/`ldd`/`ghostty --version` all clean. See SETUP.md Step 13 for the full diagnostic trail. | Done — upload to the actual COPR (see restated Goal) |
 | mangowm | ✅ **RESOLVED 2026-09-29 — builds successfully, real COPR builds succeeded on both chroots.** User supplied a link to Terra's current Fedora 44 SRPM for mangowm 0.17.4; fetching and inspecting it directly found the same staleness pattern as the earlier 0.16.3 assessment: Terra's own `mangowm.spec` still declares `BuildRequires: pkgconfig(wlroots-0.19)`, but 0.17.4's actual source (`meson.build`) requires `wlroots-0.20 >=0.20.0` and `scenefx-0.5 >=0.5.0` — confirmed by extracting the SRPM and reading meson.build directly, not assumed. `xkbcommon` >=1.8.0 was already satisfied (bumped to 1.13.1 earlier this session for Hyprland). Full chain built, in order: `pixman` bumped 0.43.4→0.46.4 (Fedora rawhide fork, **system-wide** — confirmed same `libpixman-1.so.0` SONAME across this version range via a real reverse-dependency check, so existing consumers keep working unrebuilt, unlike the real SONAME-breaking lua/iniparser conflicts); `libdrm` bumped 2.4.128→2.4.134 (Fedora rawhide fork, also system-wide, same SONAME-stability reasoning — found genuinely necessary via a real failed build: wlroots' own meson.build hard-enforces `>=2.4.129`, not just an RPM spec pin); `wlroots0.20` (Fedora's current unversioned `wlroots` spec, renamed to install side-by-side with el10's plain `wlroots` 0.18.2 which `cage` still depends on — same pattern as the existing `wlroots0.19` package); `scenefx` bumped back to 0.5/wlroots-0.20 (superseding the earlier 0.4.1/wlroots-0.19 pin, since that decision's premise — mango needing wlroots-0.19 — turned out to be based on Terra's stale spec, not mango's real requirement); `mangowm` itself, corrected to declare what 0.17.4 actually needs. Real mock build + local install + smoke test (`mango --help`, `ldd`, `rpm -V` all clean) succeeded first try once the chain was in place; regression-checked `Hyprland`/`niri` still work after the system-wide pixman/libdrm bump. Real COPR builds (both `centos-stream-10-x86_64` and `epel-10-x86_64`): `pixman` 11047470/11047484, `libdrm` 11047472/11047487, `wlroots0.20` 11047474/11047491, `scenefx` 11047475/11047492, `mangowm` 11047476/11047494 — all 10 succeeded. | Done — live on both COPR chroots |
-| hyprland | ✅ **RESOLVED — builds successfully, real COPR build 11031343 succeeded.** Full chain: `aquamarine`, `hyprutils`, `hyprlang`, `hyprcursor`, `hyprgraphics`, `hyprwayland-scanner`, `hyprwire`, `hyprland-protocols` (all from-scratch or forked-and-fixed), plus `libxkbcommon`/`lua`/`muparser` bumped/forked to satisfy version floors. Needed `gcc-toolset-16` (el10's default GCC 14 has real libstdc++ gaps against the C++23/26 features this codebase uses — `std::vector::append_range`, `std::ranges::starts_with` — both confirmed missing via real compile failures, both official opt-in el10 packages, not COPR/third-party). Vendored `glaze` (header-only JSON lib, FetchContent-overridden to a local copy) and the exact `udis86` submodule commit Hyprland pins. **Known open issue**: `lua` 5.5.1 (needed for `lua>=5.5,<5.6`) collides with el10's own `lua-libs` 5.4, which `wireplumber`/`ibus-libpinyin` depend on — confirmed via a real local install attempt, not forced through. Real packaging-strategy decision needed before this ships broadly (side-by-side lua rename vs. accept the conflict vs. something else) — not a build blocker. Terra's dropped Hyprland core turned out to matter less than feared — Fedora rawhide had references for most of the real gaps (unbranched to EPEL, same pattern throughout this repo). `aquamarine`, `hyprwire`, and `hyprland` itself were the only genuinely from-scratch specs (no reference anywhere). See SETUP.md Steps 15–18 for the full trail. **Real, separate runtime gap found 2026-09-25 via live testing**: `dms` (the DMS shell) never actually started on login under Hyprland. Root cause confirmed by reading Hyprland's own source directly: unlike niri (whose `niri-session` wrapper natively activates `graphical-session.target`), plain Hyprland has *zero* built-in systemd session integration — `dms.service`'s `WantedBy=graphical-session.target` never fires under it. Fix (matching DMS's own documented Hyprland guidance): run `dms setup headless --compositor hyprland --no-systemd`, which deploys a direct `hl.on("hyprland.start", ...) -> dms run` exec hook into `hyprland.lua` instead of relying on the systemd target at all. `dank-install-el10.sh` was missing this step entirely (only installed packages + `systemctl --user enable --now dms`, never `dms setup`) — now fixed there for niri/hyprland (mango too, once buildable); `dms setup` doesn't support `miracle-wm` at all (confirmed: `unknown compositor "miracle-wm"`), left as a documented gap. | Done — upload to the actual COPR (already done: build 11031343) |
+| hyprland | ✅ **RESOLVED — builds successfully, real COPR build 11031343 succeeded.** Full chain: `aquamarine`, `hyprutils`, `hyprlang`, `hyprcursor`, `hyprgraphics`, `hyprwayland-scanner`, `hyprwire`, `hyprland-protocols` (all from-scratch or forked-and-fixed), plus `libxkbcommon`/`lua`/`muparser` bumped/forked to satisfy version floors. Needed `gcc-toolset-16` (el10's default GCC 14 has real libstdc++ gaps against the C++23/26 features this codebase uses — `std::vector::append_range`, `std::ranges::starts_with` — both confirmed missing via real compile failures, both official opt-in el10 packages, not COPR/third-party). Vendored `glaze` (header-only JSON lib, FetchContent-overridden to a local copy) and the exact `udis86` submodule commit Hyprland pins. **Known open issue**: `lua` 5.5.1 (needed for `lua>=5.5,<5.6`) collides with el10's own `lua-libs` 5.4, which `wireplumber`/`ibus-libpinyin` depend on — confirmed via a real local install attempt, not forced through. Real packaging-strategy decision needed before this ships broadly (side-by-side lua rename vs. accept the conflict vs. something else) — not a build blocker. Terra's dropped Hyprland core turned out to matter less than feared — Fedora rawhide had references for most of the real gaps (unbranched to EPEL, same pattern throughout this repo). `aquamarine`, `hyprwire`, and `hyprland` itself were the only genuinely from-scratch specs (no reference anywhere). See SETUP.md Steps 15–18 for the full trail. **Real, separate runtime gap found 2026-09-25 via live testing**: `dms` (the DMS shell) never actually started on login under Hyprland. Root cause confirmed by reading Hyprland's own source directly: unlike niri (whose `niri-session` wrapper natively activates `graphical-session.target`), plain Hyprland has *zero* built-in systemd session integration — `dms.service`'s `WantedBy=graphical-session.target` never fires under it. Fix (matching DMS's own documented Hyprland guidance): run `dms setup headless --compositor hyprland --no-systemd`, which deploys a direct `hl.on("hyprland.start", ...) -> dms run` exec hook into `hyprland.lua` instead of relying on the systemd target at all. `dux-install-el10.sh` was missing this step entirely (only installed packages + `systemctl --user enable --now dms`, never `dms setup`) — now fixed there for niri/hyprland (mango too, once buildable); `dms setup` doesn't support `miracle-wm` at all (confirmed: `unknown compositor "miracle-wm"`), left as a documented gap. | Done — upload to the actual COPR (already done: build 11031343) |
 | alacritty | ✅ **RESOLVED 2026-10-01 — builds successfully, real COPR builds queued on all 4 chroots.** Written entirely from scratch — confirmed absent from Fedora rawhide/epel9/epel10 dist-git (all 404) and from Terra EL, unlike every other terminal/compositor in this repo which had at least a starting-point spec somewhere. The blocker isn't a missing dependency, it's packaging-model: Alacritty's Cargo.lock pins ~150 crates, making Fedora's strict per-crate-RPM convention (used elsewhere in this repo for `rust-pam-sys` etc.) impractical for an end-user app. Packaged instead with a plain `cargo vendor` tarball as a second source plus `cargo build --release --offline` directly in `%build` — a deliberate, documented departure from this repo's usual Rust packaging pattern (see the spec's own header comment). Two real build-time bugs found and fixed: (1) assumed `alacritty-msg` was a separate binary (mirroring `hyprctl`/`hyprpm`-style companion tools elsewhere in this repo) based on seeing its own man page source — real mock build failed with `install: cannot stat 'target/release/alacritty-msg'`; checked upstream's `alacritty/Cargo.toml` directly, confirmed no `[[bin]]` section exists for it, it's a subcommand (`alacritty msg`) of the single `alacritty` binary, not a standalone executable — removed the bogus binary install/file lines, kept the (still-correct) man page; (2) shipped our own `tic`-compiled terminfo entry, which real `dnf install` rejected with a file conflict — el10's stock `ncurses-base` already ships `/usr/share/terminfo/a/alacritty` as its own file, so the fix was to drop our terminfo install entirely and `Requires: ncurses-base` instead. Real mock build succeeded, real local install succeeded, `alacritty --version`/`ldd`/`rpm -V`/`desktop-file-validate`/man pages all clean. | Done — queued to all 4 COPR chroots (centos-stream-10-x86_64 11059796, epel-10-x86_64 11059798, centos-stream-10-aarch64 11059800, epel-10-aarch64 11059801) |
 | ghostty/aarch64 (zig) | ❌ **Still blocked, investigated 2026-10-02 — 3 real approaches tried, all hit genuine build-confirmed walls.** EPEL doesn't ship `zig` for aarch64 (Fedora's own spec deliberately restricts it to x86_64 on RHEL/EPEL). Tried: (1) consuming a third-party COPR (`lumarel/zig`) directly — broke immediately, a real RPM dependency-resolution trap where stock EPEL's `llvm20-libs` silently satisfies zig's soname-only runtime dependency while missing 9 of 18 required LLVM targets, crashing zig at first invocation; reverted. (2) building zig ourselves against stock EPEL's `llvm20-devel` with a trimmed target-completeness check — broke one layer deeper, open-ended undefined-symbol whack-a-mole across two separate zig code-generation paths (not a one-time patch). (3) building a full-target LLVM ourselves (forking lumarel's `rpms-llvm`, ~5h/build per their own measured times) — not attempted once a second blocker surfaced: their spec's package names collide with stock EPEL's, and the real fix (side-by-side renaming, this repo's own wlroots0.19/0.20 pattern) needs an install-path audit across their ~3700-line spec, not just a name swap. Full build-by-build trail in SETUP.md Step 28. `specs/zig/zig.spec` committed with a `STATUS: BLOCKED` header for whoever resumes this. | Not done — real effort remains; see SETUP.md Step 28 for exactly where to pick it up |
 | miraclewm | ⚠️ **Correction (2026-09-24): this row was wrong.** Initial research checked the wrong package names (`miraclewm`, `mir-libs`, `miral`, `mircommon` as separate dist-git repos) and concluded the whole Mir toolkit was unpackaged anywhere — user correctly pushed back. The real names are `mir` (a single spec building `miral`/`mircommon`/`mirserver`/`mirwayland`/etc. as subpackages) and `miracle-wm` (hyphenated), **both real, actively-maintained Fedora packages** (`mir` updated Sep 21 2026, `miracle-wm` Sep 21 2026) — there's even an official Fedora Spin for it. Full dependency sweep against el10 found nearly everything already present, including niche ones (`wlcs`, `glm-devel`, `gflags-devel`); 2 more deps genuinely missing (`umockdev`, `python-dbusmock` — both forked from Fedora rawhide; turned out to be needed unconditionally at CMake *configure* time, not just test-execution as first assumed, confirmed via two real failed builds). `mir`'s C++ source also hit real GCC 14 libstdc++ completeness gaps (`std::optional::value_or({...})` brace-init overload resolution) — fixed with `gcc-toolset-15` (official opt-in newer-GCC package on el10). ✅ **RESOLVED — both `mir` (real COPR build 11031169) and `miracle-wm` (11031307) succeeded.** See SETUP.md Steps 15–18. | Done |
@@ -157,13 +157,13 @@ not an infrastructure blocker.
 - (pending) COPR target for Hyprland once its own dependency chain (aquamarine, hyprutils,
   hyprlang, hyprcursor, hyprgraphics) is packaged for el10 — see Known Blockers
 
-**Real bug found and fixed 2026-09-27**: `sudo dnf copr enable kmf/dank-ws-copr` failed outright on
+**Real bug found and fixed 2026-09-27**: `sudo dnf copr enable kmf/dux-ws-copr` failed outright on
 a freshly-tested el10 host with `Repository 'epel-10-x86_64' does not exist in project
-'kmf/dank-ws-copr'. Available repositories: 'centos-stream-10-x86_64'`. Root cause: a newer
+'kmf/dux-ws-copr'. Available repositories: 'centos-stream-10-x86_64'`. Root cause: a newer
 `dnf-plugins-core` auto-detects the local Copr chroot name as `epel-10-x86_64` (Copr's generic
 "Enterprise Linux 10" chroot, covering RHEL/CentOS Stream/Rocky/Alma uniformly), not the
 CentOS-Stream-specific `centos-stream-10-x86_64` this project had only ever built for. Fixed by
-adding the `epel-10-x86_64` chroot (`copr-cli modify kmf/dank-ws-copr --chroot
+adding the `epel-10-x86_64` chroot (`copr-cli modify kmf/dux-ws-copr --chroot
 centos-stream-10-x86_64 --chroot epel-10-x86_64`) and rebuilding all 33 packages for it in
 dependency order — Copr chroots don't share build artifacts with each other, so the new chroot
 started completely empty. All 33 succeeded (72/72 real builds total across both chroots now).
@@ -171,7 +171,7 @@ Verified live: `dnf copr enable` succeeds, `hyprland`/`dms`/`cava` all resolve a
 cleanly. Full detail in `TESTING.md`'s "Runtime bugs found and fixed" section.
 
 ## Open Questions
-1. CI trigger model — Packit/webhook on push to `dank-ws-copr`, or manual `copr-cli build` from `durin`? Decides how granular commit scoping needs to be.
+1. CI trigger model — Packit/webhook on push to `dux-ws-copr`, or manual `copr-cli build` from `durin`? Decides how granular commit scoping needs to be.
 2. Do we ship both `dms` and `dms-git` for CentOS Stream 10, or stable-only first pass? **Narrowed
    by findings above:** since only `avengemedia/dms-git` appears to actually exist/be populated for
    el10 today (no stable `avengemedia/dms` el10 builds found), this may not be our choice to make
@@ -182,12 +182,12 @@ cleanly. Full detail in `TESTING.md`'s "Runtime bugs found and fixed" section.
    `SETUP.md` Step 6). This doesn't cover actual GUI/Wayland-session rendering, so a real desktop
    smoke test is still open if that level of validation is wanted.
 
-## Side project — `scripts/dank-install-el10.sh`
+## Side project — `scripts/dux-install-el10.sh`
 
-AvengeMedia's own `dankinstall` (`curl -fsSL https://install.danklinux.com | sh`) doesn't support
+Dux Labs' own `dankinstall` (`curl -fsSL https://install.duxlabs.dev | sh`) doesn't support
 RHEL/CentOS/EPEL at all (Arch, Fedora, Ubuntu 26.04+, Debian 13+, openSUSE Tumbleweed, Gentoo only).
-`scripts/dank-install-el10.sh` is a flag-driven (non-interactive, v1) shell-script equivalent for
-el10: enables EPEL + CRB + `avengemedia/danklinux` + `avengemedia/dms-git` + `kmf/dank-ws-copr`
+`scripts/dux-install-el10.sh` is a flag-driven (non-interactive, v1) shell-script equivalent for
+el10: enables EPEL + CRB + `avengemedia/danklinux` + `avengemedia/dms-git` + `kmf/dux-ws-copr`
 (+ `yalter/niri` if niri is chosen), installs the Tier 1/2 deps, the chosen compositor
 (`niri`/`hyprland`/`miracle-wm`) and terminal (`ghostty`/`kitty`/`alacritty`), `dms` + `dms-greeter`,
 and enables the `dms` systemd user service. Refuses `--compositor hyprland` if
@@ -197,12 +197,12 @@ only dry-run tested so far.
 
 ## Related Links
 
-**Core Dank COPR**
+**Core Dux COPR**
 - https://copr.fedorainfracloud.org/coprs/avengemedia/danklinux/
 - https://copr.fedorainfracloud.org/coprs/avengemedia/dms-git/
 - https://copr.fedorainfracloud.org/coprs/avengemedia/dms
 
-**Dank Wayland Compositor Links**
+**Dux Wayland Compositor Links**
 - https://copr.fedorainfracloud.org/coprs/lionheartp/Hyprland/
 - https://copr.fedorainfracloud.org/coprs/yalter/niri/
 - https://copr.fedorainfracloud.org/coprs/lumarel/ghostty/
@@ -230,4 +230,4 @@ where both exist, not just this one.
 
 **CentOS Stream 10 / EPEL setup**
 - https://doc.fedoraproject.org/cs/epel/getting-started
-- https://github.com/AvengeMedia/DankMaterialShell/blob/master/core/internal/distros/fedora.go
+- https://github.com/duxlabs-dev/dux-shell/blob/master/core/internal/distros/fedora.go

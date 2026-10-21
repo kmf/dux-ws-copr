@@ -1,16 +1,16 @@
-# Testing Report — DankMaterialShell on CentOS Stream 10
+# Testing Report — Dux Shell on CentOS Stream 10
 
-Prepared in support of [AvengeMedia/DankMaterialShell#3442 "Officially Support: RHEL 10"](https://github.com/AvengeMedia/DankMaterialShell/issues/3442).
+Prepared in support of [Dux Labs/Dux Shell#3442 "Officially Support: RHEL 10"](https://github.com/duxlabs-dev/dux-shell/issues/3442).
 
 **Test machine**: `durin`, a real (not disposable/CI) CentOS Stream 10 workstation, x86_64,
 kernel 6.12.0-269.el10, actively used as a daily-driver desktop during this work — not a scratch
 VM spun up only to pass a build.
 
-**COPR project**: [kmf/dank-ws-copr](https://copr.fedorainfracloud.org/coprs/kmf/dank-ws-copr/),
+**COPR project**: [kmf/dux-ws-copr](https://copr.fedorainfracloud.org/coprs/kmf/dux-ws-copr/),
 building for two chroots: `centos-stream-10-x86_64` and `epel-10-x86_64`. Both are needed —
 newer `dnf-plugins-core` auto-detects a real CentOS Stream 10 host's Copr chroot as `epel-10-x86_64`
 (Copr's generic "Enterprise Linux 10" name, covering RHEL/CentOS Stream/Rocky/Alma uniformly), not
-`centos-stream-10-x86_64` — so `dnf copr enable kmf/dank-ws-copr` failed outright until the second
+`centos-stream-10-x86_64` — so `dnf copr enable kmf/dux-ws-copr` failed outright until the second
 chroot was added and every package rebuilt for it (confirmed live: `hyprland`/`dms`/`cava` all now
 resolve and dry-run install cleanly from it).
 
@@ -126,7 +126,7 @@ itself.
 | `scenefx` (bumped) | 0.5 | [11047475](https://copr.fedorainfracloud.org/coprs/build/11047475) / [11047492](https://copr.fedorainfracloud.org/coprs/build/11047492) | Installed |
 | `mangowm` | 0.17.4 | [11047476](https://copr.fedorainfracloud.org/coprs/build/11047476) / [11047494](https://copr.fedorainfracloud.org/coprs/build/11047494) | Installed, `mango --help` runs, `ldd`/`rpm -V` clean |
 
-Consumed as-is, not built in this repo (already work on el10 via their own upstream/AvengeMedia
+Consumed as-is, not built in this repo (already work on el10 via their own upstream/Dux Labs
 COPRs — no fork needed): `dms`, `dms-cli`, `quickshell-git`, `matugen`, `cliphist`, `danksearch`,
 `dgop`, `dankcalendar-git` (via `avengemedia/danklinux` + `avengemedia/dms-git`); `niri` (via
 `yalter/niri`); `kf6-kimageformats` (via EPEL directly).
@@ -227,8 +227,8 @@ and running, and the greeter is live on this exact machine as this report is wri
   [11035382](https://copr.fedorainfracloud.org/coprs/build/11035382) → `aquamarine`
   [11035384](https://copr.fedorainfracloud.org/coprs/build/11035384) → `hyprland`
   [11035386](https://copr.fedorainfracloud.org/coprs/build/11035386).
-- **`dnf copr enable kmf/dank-ws-copr` failed outright on a real, freshly-tested el10 host** with
-  `Repository 'epel-10-x86_64' does not exist in project 'kmf/dank-ws-copr'. Available
+- **`dnf copr enable kmf/dux-ws-copr` failed outright on a real, freshly-tested el10 host** with
+  `Repository 'epel-10-x86_64' does not exist in project 'kmf/dux-ws-copr'. Available
   repositories: 'centos-stream-10-x86_64'`. Root cause: a newer `dnf-plugins-core` auto-detects the
   local Copr chroot name as `epel-10-x86_64` (Copr's generic "Enterprise Linux 10" chroot, covering
   RHEL/CentOS Stream/Rocky/Alma uniformly) rather than the CentOS-Stream-specific
@@ -247,11 +247,11 @@ To check this repo actually works for someone with none of that, pulled a genuin
 public-facing flow a new user would:
 
 1. `dnf install dnf-plugins-core epel-release && crb enable`
-2. `dnf copr enable kmf/dank-ws-copr` — confirmed it auto-detects `epel-10-$basearch` here too (the
+2. `dnf copr enable kmf/dux-ws-copr` — confirmed it auto-detects `epel-10-$basearch` here too (the
    same real bug fixed earlier), not just on `durin`.
-3. Downloaded `scripts/dank-install-el10.sh` from its actual public raw GitHub URL (not copied from
+3. Downloaded `scripts/dux-install-el10.sh` from its actual public raw GitHub URL (not copied from
    the local filesystem) and ran it for real as an unprivileged sudo user:
-   `./dank-install-el10.sh -c niri -t ghostty -y`.
+   `./dux-install-el10.sh -c niri -t ghostty -y`.
 
 **Result: every expected package installed correctly** — `niri`, `dms`, `dms-cli`, `dms-greeter`,
 `greetd`, `quickshell-git`, `matugen`, `cliphist`, `danksearch`, `dgop`, `dankcalendar-git`,
@@ -304,8 +304,8 @@ libvirt bugs:
 **Test performed**, entirely inside the VM over SSH, using only its own network access to the real
 internet (nothing copied from `durin`'s filesystem):
 1. `dnf install dnf-plugins-core epel-release && crb enable`
-2. Downloaded and ran the real published `dank-install-el10.sh` from its raw GitHub URL:
-   `./dank-install-el10.sh -c hyprland -t ghostty -y`
+2. Downloaded and ran the real published `dux-install-el10.sh` from its raw GitHub URL:
+   `./dux-install-el10.sh -c hyprland -t ghostty -y`
 3. Rebooted the VM for real (`sudo reboot`) - not just re-running a service.
 
 **Result: booted correctly straight into a working Hyprland greeter session**, entirely
@@ -434,7 +434,7 @@ session work) and the freshly-added `centos-stream-10-aarch64` chroot (empty `ad
 confirmed that gap directly, then confirmed a couple more failures (`rust-pam-sys`: missing
 `rust-packaging`; `mir`: missing `cargo-rpm-macros`/`gflags-devel`/`glog-devel`/`glm-devel`) all
 traced to the same missing-EPEL-and-CRB cause. Fixed with `copr-cli edit-chroot
-centos-stream-10-aarch64 --repos "<EPEL aarch64 URL> <CRB aarch64 URL> copr://kmf/dank-ws-copr"`,
+centos-stream-10-aarch64 --repos "<EPEL aarch64 URL> <CRB aarch64 URL> copr://kmf/dux-ws-copr"`,
 matching the x86_64 chroot's existing config. (The `epel-10-x86_64`/`epel-10-aarch64` chroot family
 didn't need this - EPEL is already baked into "epel-10" chroots by design, only the plain
 "centos-stream-10" family needs it added manually.)
@@ -494,10 +494,10 @@ succeeded** (`centos-stream-10-x86_64` 37/37, `epel-10-x86_64` 37/37, `centos-st
 ## Reproducing this
 
 ```bash
-sudo dnf copr enable -y avengemedia/danklinux avengemedia/dms-git kmf/dank-ws-copr
-curl -fsSL -o dank-install-el10.sh https://raw.githubusercontent.com/kmf/dank-ws-copr/main/scripts/dank-install-el10.sh
-chmod +x dank-install-el10.sh
-./dank-install-el10.sh -c hyprland -t ghostty -y
+sudo dnf copr enable -y avengemedia/danklinux avengemedia/dms-git kmf/dux-ws-copr
+curl -fsSL -o dux-install-el10.sh https://raw.githubusercontent.com/kmf/dux-ws-copr/main/scripts/dux-install-el10.sh
+chmod +x dux-install-el10.sh
+./dux-install-el10.sh -c hyprland -t ghostty -y
 ```
 
 See [`README.md`](README.md) for full installation instructions, [`PLAN.md`](PLAN.md) for the

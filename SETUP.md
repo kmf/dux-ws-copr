@@ -104,7 +104,7 @@ stable-only).
 | hyprland | ❌ no | No package in any enabled repo, incl. `lionheartp/Hyprland` (not enabled here — would need adding + checking el10 target exists) |
 | mangowm | ❌ no | Not found |
 | miraclewm | ❌ no | Not found (confirms PLAN.md: Mir-based, likely no el10 stack) |
-| kitty | ✅ yes (from **base CentOS/EPEL**, not a Dank repo) | `kitty-0.47.1-3.el10_3.x86_64` — already packaged upstream, no porting needed |
+| kitty | ✅ yes (from **base CentOS/EPEL**, not a Dux repo) | `kitty-0.47.1-3.el10_3.x86_64` — already packaged upstream, no porting needed |
 | alacritty | ❌ no | Not found in any enabled repo |
 | ghostty | ❌ no | Confirms PLAN.md: needs Zig toolchain, no prebuilt el10 package found |
 | material-symbols-fonts | ✅ yes | `1.0-1.el10.noarch`, from `avengemedia/danklinux` |
@@ -278,7 +278,7 @@ shape of this project's choices. Options, roughly in order of effort:
    Fedora packaging conventions, Obsoletes chain, systemd user units).
 2. **Adopt Terra EL as a dependency source** — enable it (after resolving the GPG-check question)
    and consume its `dank-material-shell`, `breakpad`, `ghostty` packages directly instead of
-   building our own, focusing `dank-ws-copr`'s own work only on genuine gaps (greetd, and
+   building our own, focusing `dux-ws-copr`'s own work only on genuine gaps (greetd, and
    whatever Tier 4 pieces still aren't covered anywhere).
 3. **Use Terra's specs as reference/starting points** — fork/adapt their `.spec` files (e.g. for
    ghostty, breakpad) into our own COPR rather than depending on their infra directly, keeping full
@@ -515,19 +515,19 @@ headers; none uploaded to any actual COPR yet (see PLAN.md's restated goal below
 
 ## Step 12 — Push to GitHub, install copr-cli
 
-User confirmed the `kmf/dank-ws-copr` GitHub repo exists. This host had no `gh` auth and no git
+User confirmed the `kmf/dux-ws-copr` GitHub repo exists. This host had no `gh` auth and no git
 remote configured yet.
 ```
 gh auth status                          # -> not logged in
 ssh -T git@github.com                   # -> "Host key verification failed" (fresh known_hosts)
 ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 ssh -T git@github.com                   # -> "Hi kmf! ... successfully authenticated"
-git remote add origin git@github.com:kmf/dank-ws-copr.git
+git remote add origin git@github.com:kmf/dux-ws-copr.git
 git fetch origin                        # -> confirmed genuinely empty, no branches, safe to push
 git push -u origin main
 ```
-Pushed clean — confirmed via `curl https://api.github.com/repos/kmf/dank-ws-copr`: public repo,
-default branch `main`, all 5 local commits present. Live at https://github.com/kmf/dank-ws-copr.
+Pushed clean — confirmed via `curl https://api.github.com/repos/kmf/dux-ws-copr`: public repo,
+default branch `main`, all 5 local commits present. Live at https://github.com/kmf/dux-ws-copr.
 
 Also installed `copr-cli` (`sudo dnf install -y copr-cli`) in preparation for creating the actual
 COPR project. **Blocked on a manual step**: it needs an API token tied to a Fedora Account
@@ -685,7 +685,7 @@ something else.
 
 **Also recorded standing preference (explicit, 2026-09-24): always prefer `avengemedia` over Terra
 (or any other third-party source) when both provide equivalent packages.** Settles the earlier
-"build vs. adopt Terra's DankMaterialShell spec" open question for good - stick with avengemedia's
+"build vs. adopt Terra's Dux Shell spec" open question for good - stick with avengemedia's
 `dms`/`dms-cli`. See PLAN.md's Related Links section for the full note.
 
 ## Step 15 — Hyprland dependency chain: 6 more libs forked, built, verified
@@ -924,7 +924,7 @@ resolve what happens when a real user with wireplumber/ibus-libpinyin installs i
 **Open items for later, not blockers for what was asked**: the lua/wireplumber conflict (needs a
 decision), `mangowm` (still blocked on the pixman/xkbcommon system bump decision from Step 14, not
 touched further), `dms-greeter`'s real greetd chain already shipped, the actual `dnf copr enable
-kmf/dank-ws-copr && dnf install ...` end-user flow hasn't been validated on a machine other than
+kmf/dux-ws-copr && dnf install ...` end-user flow hasn't been validated on a machine other than
 `durin` yet, and `copr-cli` package-tracking (SCM-based auto-rebuild-on-push) vs. manual
 `copr-cli build` per release hasn't been decided (Open Question 1 in PLAN.md).
 
@@ -948,7 +948,7 @@ created) are expected/inert for a fresh install:
   BaseOS/AppStream/CRB. Built clean in mock on the first try (7s srpm + ~50s build), installed
   locally, `cava -v` runs. Real COPR build succeeded (11031735).
 
-Added both to `dank-install-el10.sh`'s new `OPTIONAL_PACKAGES` array (installed right alongside the
+Added both to `dux-install-el10.sh`'s new `OPTIONAL_PACKAGES` array (installed right alongside the
 existing `CORE_PACKAGES` set) so future installs pick them up automatically instead of needing a
 separate `dms doctor` pass + manual fix.
 
@@ -996,7 +996,7 @@ found via `dms --help`) deploys a direct `hl.on("hyprland.start", ...) -> dms ru
 `hyprland.lua` instead - bypasses the whole systemd-target dependency. Ran it live against the
 user's actual running Hyprland session's Wayland socket (`sudo -u kmf env
 HYPRLAND_INSTANCE_SIGNATURE=... WAYLAND_DISPLAY=wayland-1 dms run`) so they could see DMS appear
-immediately without logging out. `dank-install-el10.sh` was missing this whole step - fixed to call
+immediately without logging out. `dux-install-el10.sh` was missing this whole step - fixed to call
 `dms setup headless` after installing the compositor+terminal (guards `miracle-wm`, which `dms
 setup` explicitly doesn't support: `unknown compositor "miracle-wm" (expected niri, hyprland, or
 mango)`).
@@ -1057,15 +1057,15 @@ Real COPR builds, in order: `hyprwayland-scanner` (11035382) -> `aquamarine` (11
 ## Step 24 — the epel-10-x86_64 chroot: a real `dnf copr enable` failure
 
 User reported an error running the install script: `Repository 'epel-10-x86_64' does not exist in
-project 'kmf/dank-ws-copr'. Available repositories: 'centos-stream-10-x86_64'`. Reproduced directly
-on `durin` with `sudo dnf copr enable -y kmf/dank-ws-copr`.
+project 'kmf/dux-ws-copr'. Available repositories: 'centos-stream-10-x86_64'`. Reproduced directly
+on `durin` with `sudo dnf copr enable -y kmf/dux-ws-copr`.
 
 Root cause: a newer `dnf-plugins-core` auto-detects the local Copr chroot name as `epel-10-x86_64`
 (Copr's generic "Enterprise Linux 10" chroot, covering RHEL/CentOS Stream/Rocky/Alma uniformly) -
 not `centos-stream-10-x86_64`, the only chroot this project had ever enabled. Confirmed by checking
 the actual `.repo` file `dnf copr enable` wrote: `baseurl=.../epel-10-$basearch/`.
 
-Fixed by adding the second chroot to the project itself (`copr-cli modify kmf/dank-ws-copr --chroot
+Fixed by adding the second chroot to the project itself (`copr-cli modify kmf/dux-ws-copr --chroot
 centos-stream-10-x86_64 --chroot epel-10-x86_64` - passing both, since `modify --chroot` replaces
 the list rather than appending to it), then rebuilding **all 33 packages that existed at the time**
 for it, in the same dependency order used originally - Copr chroots don't share build artifacts
@@ -1147,7 +1147,7 @@ executing them. Concluded it should compile fine on aarch64 even though the feat
 makes semantic sense on x86_64 hosts, but didn't just assume - confirmed by the real build below
 instead.
 
-Added `centos-stream-10-aarch64` and `epel-10-aarch64` chroots (`copr-cli modify kmf/dank-ws-copr
+Added `centos-stream-10-aarch64` and `epel-10-aarch64` chroots (`copr-cli modify kmf/dux-ws-copr
 --chroot <all four>`), then queued the full 37-package dependency chain (same order established for
 the `epel-10-x86_64` chroot earlier). **First attempt: near-total failure** - checked one log
 (`hyprwayland-scanner`) directly: `No matching package to install: 'cmake(pugixml)'`. Compared
@@ -1156,7 +1156,7 @@ the `epel-10-x86_64` chroot earlier). **First attempt: near-total failure** - ch
 the gap directly, then spot-checked two more failures (`rust-pam-sys`: missing `rust-packaging`;
 `mir`: missing `cargo-rpm-macros`/`gflags-devel`/`glog-devel`/`glm-devel`) to confirm it was the
 same root cause across the board, not several unrelated issues. Fixed with `copr-cli edit-chroot
-centos-stream-10-aarch64 --repos "<EPEL aarch64 URL> <CRB aarch64 URL> copr://kmf/dank-ws-copr"`
+centos-stream-10-aarch64 --repos "<EPEL aarch64 URL> <CRB aarch64 URL> copr://kmf/dux-ws-copr"`
 (the `epel-10` chroot family already bakes EPEL in by design, so only the plain `centos-stream-10`
 family needed this).
 
