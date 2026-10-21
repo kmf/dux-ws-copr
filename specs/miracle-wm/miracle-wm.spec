@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/miracle-wm/raw/rawhide/f/miracle-wm.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (404 on both). Depends on `mir` (specs/mir/,
 # also forked from Fedora rawhide the same way) plus `gtk4-layer-shell-0` (already built earlier

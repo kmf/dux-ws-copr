@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Written from scratch for dank-ws-copr - no Fedora or Terra spec exists for muparser anywhere
+# Written from scratch for dux-ws-copr - no Fedora or Terra spec exists for muparser anywhere
 # (checked: 404 on Fedora rawhide/epel9/epel10). Needed because `hyprland` requires
 # `pkgconfig(muparser)`. Used openSUSE's official `science/muparser` spec
 # (https://build.opensuse.org/package/show/science/muparser) as a structural reference for the

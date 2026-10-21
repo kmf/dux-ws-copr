@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/hyprutils/raw/rawhide/f/hyprutils.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (404 on both). Base utility lib used by nearly
 # every other Hyprland-ecosystem package (hyprlang, hyprcursor, hyprgraphics, aquamarine, hyprland

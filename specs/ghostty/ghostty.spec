@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # Forked/adapted from Terra EL (terrapkg/packages-el, branch `el10`, GPL-3.0):
 #   https://github.com/terrapkg/packages-el/blob/el10/anda/devs/ghostty/stable/ghostty.spec
-# Adapted for dank-ws-copr (plain COPR build, no Anda build system) on 2026-09-24.
+# Adapted for dux-ws-copr (plain COPR build, no Anda build system) on 2026-09-24.
 #
 # Changes vs. upstream Terra spec:
 #   - BuildRequires: anda-srpm-macros removed (Anda-specific SRPM tooling, not needed/available

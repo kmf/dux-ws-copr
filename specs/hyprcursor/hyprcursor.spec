@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/hyprcursor/raw/rawhide/f/hyprcursor.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (404 on both). Depends on hyprlang (above).
 # Fedora's `Source: HyprBibataModernClassicSVG.tar.gz` (test-data for %%check) lives in Fedora's

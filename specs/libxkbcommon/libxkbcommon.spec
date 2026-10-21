@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked from Fedora's rawhide dist-git for dank-ws-copr, unmodified:
+# Forked from Fedora's rawhide dist-git for dux-ws-copr, unmodified:
 #   https://src.fedoraproject.org/rpms/libxkbcommon/raw/rawhide/f/libxkbcommon.spec
 # Adapted 2026-09-24. This REPLACES el10's own `libxkbcommon` (currently 1.7.0) - not a side-by-side
 # compat package, since hyprland/mir and friends reference it by its plain unversioned pkgconfig

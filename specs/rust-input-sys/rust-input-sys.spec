@@ -5,7 +5,7 @@
 %global crate input-sys
 
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/rust-input-sys/raw/rawhide/f/rust-input-sys.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (404 on both). Needed by rust-input
 # (specs/rust-input/), itself needed by mir's Rust input-evdev-rs component - discovered via a

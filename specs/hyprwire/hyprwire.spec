@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Written from scratch for dank-ws-copr - no Fedora, Terra, or any other distro spec exists for
+# Written from scratch for dux-ws-copr - no Fedora, Terra, or any other distro spec exists for
 # hyprwire anywhere (checked: Fedora rawhide/epel9/epel10 all 404). Needed because `hyprctl`
 # (hyprland's own control-utility subdirectory, built as part of the same hyprland.spec) requires
 # `pkgconfig(hyprwire)` - discovered while reading hyprland's own hyprctl/CMakeLists.txt before

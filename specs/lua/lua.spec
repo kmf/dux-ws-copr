@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked from Fedora's rawhide dist-git for dank-ws-copr, unmodified (all sources/patches
+# Forked from Fedora's rawhide dist-git for dux-ws-copr, unmodified (all sources/patches
 # vendored directly from Fedora's dist-git, none on lookaside - fetched via raw file URLs):
 #   https://src.fedoraproject.org/rpms/lua/raw/rawhide/f/lua.spec
 # Adapted 2026-09-24. Initially assumed this needed a from-scratch spec (checked `lua5.5`/`lua-5.5`/

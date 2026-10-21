@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Written from scratch for dank-ws-copr - no distro spec exists anywhere
+# Written from scratch for dux-ws-copr - no distro spec exists anywhere
 # (Fedora rawhide/epel9/epel10 all 404, checked via src.fedoraproject.org
 # branch HTTP status). Needed by hyprland-guiutils (specs/hyprland-guiutils/),
 # which needed by Hyprland's own polkit-agent/file-picker/crash-dialog

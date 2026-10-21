@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/rust-pam-sys/raw/rawhide/f/rust-pam-sys.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 in Fedora (checked: HTTP 404 on both) - one of
 # two missing crate dependencies blocking `greetd` (specs/greetd/greetd.spec, SETUP.md Step 11).

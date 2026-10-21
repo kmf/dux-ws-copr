@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr, unmodified:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr, unmodified:
 #   https://src.fedoraproject.org/rpms/umockdev/raw/rawhide/f/umockdev.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (404 on both). Needed because `mir`'s CMakeLists
 # unconditionally checks for `pkgconfig(umockdev-1.0) >= 0.6` in tests/CMakeLists.txt regardless of

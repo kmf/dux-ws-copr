@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked from Fedora rawhide dist-git for dank-ws-copr, unmodified. el10's
+# Forked from Fedora rawhide dist-git for dux-ws-copr, unmodified. el10's
 # own libdrm (2.4.128, from AppStream) is one patch release short of what
 # wlroots-0.20 (specs/wlroots0.20/, needed for mangowm 0.17.4) actually
 # enforces at build time - confirmed via a real failed build (`Dependency

@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/hyprlang/raw/rawhide/f/hyprlang.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (404 on both). Depends on hyprutils (above).
 # Release: %%autorelease -> 1%%{?dist}; %%changelog: manual (rpmautospec n/a on el10).

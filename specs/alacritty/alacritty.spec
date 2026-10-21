@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Written from scratch for dank-ws-copr - no distro spec exists anywhere for
+# Written from scratch for dux-ws-copr - no distro spec exists anywhere for
 # el10: checked Fedora dist-git (rawhide/epel9/epel10, all 404 - Alacritty
 # isn't packaged in Fedora/EPEL at all, likely due to its very large Cargo
 # dependency tree making Fedora's strict per-crate packaging policy

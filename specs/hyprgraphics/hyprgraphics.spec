@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/hyprgraphics/raw/rawhide/f/hyprgraphics.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (404 on both). Depends on hyprlang/hyprutils
 # (above) and libspng (specs/libspng/, also forked - el10 had no pkgconfig(spng) provider at all).

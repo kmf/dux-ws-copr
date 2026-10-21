@@ -24,5 +24,5 @@ source, license, and what was changed. This file is the index.
 
 Terra EL's `packages-el` repo is licensed GPL-3.0 as a whole. Per GPLv3, redistributed/modified
 files from it retain that license and must credit the source — done via the header comment in each
-adapted file plus this index. This does not relicense the rest of `dank-ws-copr`; only the files
+adapted file plus this index. This does not relicense the rest of `dux-ws-copr`; only the files
 explicitly marked above carry GPL-3.0 provenance.

@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's official rawhide dist-git spec for dank-ws-copr:
+# Forked/adapted from Fedora's official rawhide dist-git spec for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/gtk4-layer-shell/raw/rawhide/f/gtk4-layer-shell.spec
 # Adapted 2026-09-24. This package does not exist anywhere on el10 today (checked EPEL, CRB,
 # base, all enabled COPRs, and Terra EL) — it's the single missing dependency blocking `ghostty`

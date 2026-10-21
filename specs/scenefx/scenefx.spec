@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Adapted from Fedora's rawhide dist-git scenefx.spec for dank-ws-copr:
+# Adapted from Fedora's rawhide dist-git scenefx.spec for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/scenefx/raw/rawhide/f/scenefx.spec
 #
 # UPDATE 2026-09-29: bumped BACK to Fedora's current 0.5 (wlroots-0.20),

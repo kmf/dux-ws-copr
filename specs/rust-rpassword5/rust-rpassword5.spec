@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/rust-rpassword5/raw/rawhide/f/rust-rpassword5.spec
 # Adapted 2026-09-24. Already branched to epel9 (HTTP 200) but not epel10 yet (404) - just needs
 # the same branch request repeated, an established Fedora pattern, not exotic. Needed because

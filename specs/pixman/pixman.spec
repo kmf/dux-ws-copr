@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked from Fedora rawhide for dank-ws-copr. No epel9/epel10 branch exists
+# Forked from Fedora rawhide for dux-ws-copr. No epel9/epel10 branch exists
 # there (checked via src.fedoraproject.org branch HTTP status) - el10's own
 # pixman (0.43.4, from BaseOS) is too old for wlroots-0.20 (needs >=0.46.0),
 # which mangowm 0.17.4 needs transitively. Bumped SYSTEM-WIDE (not a

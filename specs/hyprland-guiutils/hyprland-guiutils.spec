@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Written from scratch for dank-ws-copr - no distro spec exists anywhere
+# Written from scratch for dux-ws-copr - no distro spec exists anywhere
 # (Fedora rawhide/epel9/epel10 all 404 for both this and its predecessor
 # name, hyprland-qtutils). Closes the actual "missing hyprland-guiutils" gap
 # this repo was asked to fix - Hyprland itself shells out to these binaries

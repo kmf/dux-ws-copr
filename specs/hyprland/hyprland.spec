@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Written from scratch for dank-ws-copr - no Fedora, Terra, or any other distro spec exists for
+# Written from scratch for dux-ws-copr - no Fedora, Terra, or any other distro spec exists for
 # hyprland anywhere (checked exhaustively: Fedora rawhide/epel9/epel10 all 404; Terra deliberately
 # removed their spec, "doesn't build anymore... whole freedesktop thing" - see SETUP.md Step 8).
 # This is the capstone of the whole Hyprland dependency chain built up this session: aquamarine,

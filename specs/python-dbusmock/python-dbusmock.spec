@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr, unmodified:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr, unmodified:
 #   https://src.fedoraproject.org/rpms/python-dbusmock/raw/rawhide/f/python-dbusmock.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (404 on both). Real second-round finding: `mir`
 # needs `python3-dbusmock` genuinely at CMake *configure* time too (a Python import check, not just

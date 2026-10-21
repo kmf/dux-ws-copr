@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/greetd/raw/rawhide/f/greetd.spec
 # Adapted 2026-09-24. Confirmed via Fedora dist-git branch listing that greetd is genuinely just
 # unbranched for EPEL (spec exists at rawhide/f41/f42, 404s at epel9/epel10) - not broken or

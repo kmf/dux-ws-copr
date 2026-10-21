@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/hyprland-protocols/raw/rawhide/f/hyprland-protocols.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (404 on both). One of hyprland's own optional
 # deps: `pkg_check_modules(hyprland_protocols_dep hyprland-protocols>=0.7.0)` - if not found,

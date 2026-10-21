@@ -5,7 +5,7 @@
 %global crate input
 
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/rust-input/raw/rawhide/f/rust-input.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (404 on both). Needed by `mir`'s Rust
 # input-evdev-rs component (Cargo.lock wants input >=0.8.3, <0.11.0, both default and

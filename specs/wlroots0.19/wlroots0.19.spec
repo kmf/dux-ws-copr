@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/wlroots0.19/raw/rawhide/f/wlroots0.19.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (checked: 404 on both) - unbranched, same
 # pattern as every other fork this session. Needed as a compat/side-by-side package: el10's plain

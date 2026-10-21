@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Written from scratch for dank-ws-copr - no Fedora, Terra, or any other distro spec exists for
+# Written from scratch for dux-ws-copr - no Fedora, Terra, or any other distro spec exists for
 # aquamarine anywhere (checked: Fedora rawhide/epel9/epel10 all 404; Terra never packaged it,
 # checked their anda/lib directory listing directly - see SETUP.md Step 8/15). Needed because
 # `hyprland` requires `aquamarine>=0.9.3` (Hyprland's own rendering/backend library, replacing

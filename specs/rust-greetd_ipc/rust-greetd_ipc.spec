@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/rust-greetd_ipc/raw/rawhide/f/rust-greetd_ipc.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (checked: 404 on both). Needed because
 # `greetd`'s own Cargo.toml uses a local *path* dependency on `greetd_ipc` (same source tree), but

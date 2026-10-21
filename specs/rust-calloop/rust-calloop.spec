@@ -5,7 +5,7 @@
 %global crate calloop
 
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/rust-calloop/raw/rawhide/f/rust-calloop.spec
 # Adapted 2026-09-24. Branched to epel9 but not epel10 (checked el10 - 404). Needed by `mir`'s
 # Rust input-evdev-rs component (Cargo.lock wants calloop >=0.10.0, <0.15.0 - 0.14.4 satisfies).

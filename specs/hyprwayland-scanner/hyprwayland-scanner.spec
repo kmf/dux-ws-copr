@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Forked/adapted from Fedora's rawhide dist-git for dank-ws-copr:
+# Forked/adapted from Fedora's rawhide dist-git for dux-ws-copr:
 #   https://src.fedoraproject.org/rpms/hyprwayland-scanner/raw/rawhide/f/hyprwayland-scanner.spec
 # Adapted 2026-09-24. Not branched to epel9/epel10 (checked: 404 on both). Part of the Hyprland
 # dependency chain toward eventually building `hyprland` itself (see SETUP.md and PLAN.md's
