@@ -10,13 +10,15 @@
 # %cargo_generate_buildrequires-based Rust component: those follow Fedora's
 # per-crate-as-its-own-RPM convention, which would mean packaging 150+
 # individual crates for a single application - not a reasonable tradeoff for
-# an end-user terminal emulator in this repo. Instead, vendored the full
-# dependency tree with a plain `cargo vendor` (not a Fedora-approved pattern,
-# but standard practice for non-Fedora-policy-constrained Rust app
-# packaging - used by many OBS/COPR individual-maintainer Rust app specs)
-# into Source1, and build with `cargo build --offline` directly rather than
-# via %cargo_prep/%cargo_build (those macros assume the per-crate-BuildRequires
-# model and would fight the vendor directory).
+# an end-user terminal emulator in this repo. Instead, the full dependency
+# tree (pinned by upstream's Cargo.lock) is fetched at build time with
+# `cargo fetch --locked` in %%prep - the kmf/dux-ws COPR project has
+# enable_net=true - and built with `cargo build --offline --locked`, rather
+# than via %%cargo_prep/%%cargo_build (those macros assume the
+# per-crate-BuildRequires model). Network-at-build-time approach follows
+# Dux Labs' own alacritty packaging (duxlabs-dev/dux-packaging,
+# distro/fedora/alacritty/alacritty.spec, plain `cargo build --release`);
+# it replaces the old offline `cargo vendor` tarball (Source1).
 #
 # Build dependencies taken directly from upstream's own documented RHEL 8
 # instructions (INSTALL.md): cmake, freetype-devel, fontconfig-devel,
@@ -27,16 +29,12 @@
 
 Name:           alacritty
 Version:        0.17.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A cross-platform, GPU-accelerated terminal emulator
 
 License:        Apache-2.0
 URL:            https://github.com/alacritty/alacritty
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-# `cargo vendor` tarball of the full dependency tree (Cargo.lock as pinned at
-# v0.17.0), plus a .cargo/config.toml pointing cargo at it - see header
-# comment for why this repo doesn't use the per-crate RPM model here.
-Source1:        %{name}-%{version}-vendor.tar.gz
 
 BuildRequires:  rust
 BuildRequires:  cargo
@@ -64,11 +62,12 @@ to provide a flexible set of features while remaining resource efficient.
 
 %prep
 %autosetup -n %{name}-%{version}
-tar xf %{SOURCE1}
+export CARGO_HOME=$(pwd)/.cargo
+cargo fetch --locked
 
 %build
 export CARGO_HOME=$(pwd)/.cargo
-cargo build --release --offline
+cargo build --release --offline --locked
 
 for f in extra/man/*.scd; do
     scdoc < "$f" > "$(basename "${f%.scd}")"
@@ -117,6 +116,10 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/Alacritty.desktop
 %{_datadir}/zsh/site-functions/_alacritty
 
 %changelog
+* Wed Oct 21 2026 Karl Fischer <karl@obsidian.co.za> - 0.17.0-2
+- Fetch cargo dependencies in %%prep (cargo fetch --locked, network-enabled
+  COPR) instead of the offline vendor tarball, following duxlabs-dev/dux-packaging
+
 * Thu Oct 01 2026 Karl Fischer <karl@obsidian.co.za> - 0.17.0-1
 - Initial dank-ws-copr package, written from scratch (no distro spec exists
   anywhere - Alacritty isn't packaged in Fedora/EPEL or Terra EL)
