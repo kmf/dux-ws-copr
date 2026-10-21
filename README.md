@@ -14,7 +14,7 @@
 
 [Dux Labs' `dux-packaging`](https://github.com/duxlabs-dev/dux-packaging) packages Dux Shell for
 Debian, Ubuntu, Fedora, and openSUSE. This repo covers the distro they don't: CentOS Stream 10 /
-RHEL 10 / EPEL10. Where Dux Labs' own COPR (`avengemedia/danklinux`, `avengemedia/dms-git`)
+RHEL 10 / EPEL10. Where Dux Labs' own COPR (`duxlabs/dux`, `duxlabs/dms-git`)
 already has working el10 builds, we consume those directly — this repo only exists to fill the real
 gaps: compositors and dependency chains that needed forking, patching, or building entirely from
 scratch to work on el10.
@@ -104,8 +104,8 @@ sudo -v && ./dux-install-el10.sh -c niri -t ghostty -y
 # 1. Dependencies (EPEL + CRB, plus Dux Labs' own working el10 repos)
 sudo dnf install -y epel-release
 sudo dnf config-manager --set-enabled crb
-sudo dnf copr enable -y avengemedia/danklinux
-sudo dnf copr enable -y avengemedia/dms-git
+sudo dnf copr enable -y duxlabs/dux
+sudo dnf copr enable -y duxlabs/dms-git
 
 # 2. This repo, for everything Dux Labs doesn't build for el10
 sudo dnf copr enable -y kmf/dux-ws
@@ -164,7 +164,7 @@ systemctl --user enable --now dms
 ## Build Status
 
 - **COPR**: [kmf/dux-ws](https://copr.fedorainfracloud.org/coprs/kmf/dux-ws/), targeting `centos-stream-10-x86_64`, `epel-10-x86_64` (the chroot a real `dnf copr enable` actually auto-detects on this distro family — see [TESTING.md](TESTING.md)), and their aarch64 equivalents
-- **Dependencies (Tiers 1–3)**: [avengemedia/danklinux](https://copr.fedorainfracloud.org/coprs/avengemedia/danklinux/), [avengemedia/dms-git](https://copr.fedorainfracloud.org/coprs/avengemedia/dms-git/)
+- **Dependencies (Tiers 1–3)**: [duxlabs/dux](https://copr.fedorainfracloud.org/coprs/duxlabs/dux/), [duxlabs/dms-git](https://copr.fedorainfracloud.org/coprs/duxlabs/dms-git/)
 - **niri**: [yalter/niri](https://copr.fedorainfracloud.org/coprs/yalter/niri/) (upstream, not built here)
 
 ## Contributing

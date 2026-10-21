@@ -36,9 +36,9 @@ PLAN.md was not needed — only CRB required enabling.
 sudo dnf makecache
 ```
 Observed repos already configured on this host (beyond base CentOS Stream 10 BaseOS/AppStream/CRB/Extras and EPEL):
-- Copr repo: `avengemedia/danklinux`
-- Copr repo: `avengemedia/dms-git`
-- Copr repo: `avengemedia/dms`
+- Copr repo: `duxlabs/dux`
+- Copr repo: `duxlabs/dms-git`
+- Copr repo: `duxlabs/dms`
 - Copr repo: `yalter/niri`
 - (plus unrelated personal repos: 1Password, Brave, Cider, Docker CE, insync, Tailscale — not relevant to this project)
 
@@ -67,7 +67,7 @@ cli11 note: no `x86_64` binary because it's a header-only library — ships as
 
 ### Tier 2 — shell components
 All fully available, prebuilt for el10, **all sourced from the same single COPR repo**:
-`copr:copr.fedorainfracloud.org:avengemedia:danklinux`
+`copr:copr.fedorainfracloud.org:duxlabs:dux`
 
 | Package | Available? | Example version |
 |---|---|---|
@@ -83,17 +83,17 @@ All fully available, prebuilt for el10, **all sourced from the same single COPR 
 |---|---|---|---|
 | dms         | ✅ yes (as git snapshots) | `copr:...avengemedia:dms-git` | See naming note below |
 | dms-git     | ❌ no package by this literal name | — | Not a separate package; see note below |
-| dms-greeter | ✅ yes | `copr:...avengemedia:danklinux` | 1.6.2-1.el10 |
-| dms-greeter-git | ✅ yes | `copr:...avengemedia:danklinux` | rolling builds up to git50 |
+| dms-greeter | ✅ yes | `copr:...duxlabs:dux` | 1.6.2-1.el10 |
+| dms-greeter-git | ✅ yes | `copr:...duxlabs:dux` | rolling builds up to git50 |
 
 **Naming note:** the binary RPM is always named `dms` (epoch 2), regardless of whether it's a
 "stable" or "git" build — versions like `2:0.0.git.4850.4eb16353-1.el10` are git-snapshot builds
-of the package still named `dms`. All of them come from the `avengemedia/dms-git` COPR project.
-**No separate `avengemedia/dms` (stable) COPR repo is actually enabled on this host** — only
-`avengemedia/dms-git` is (despite PLAN.md listing `avengemedia/dms` as a repo to enable; the
+of the package still named `dms`. All of them come from the `duxlabs/dms-git` COPR project.
+**No separate `duxlabs/dms` (stable) COPR repo is actually enabled on this host** — only
+`duxlabs/dms-git` is (despite PLAN.md listing `duxlabs/dms` as a repo to enable; the
 earlier `dnf makecache` metadata-refresh line for it was actually the `dms-git` repo printed under
 its two Copr-generated repo ids, not a separate stable repo). **Action item:** confirm with
-upstream/PLAN.md owner whether a stable `avengemedia/dms` COPR project exists at all, or whether
+upstream/PLAN.md owner whether a stable `duxlabs/dms` COPR project exists at all, or whether
 `dms-git` is the only channel today — this affects Open Question #2 (ship `dms` + `dms-git`, or
 stable-only).
 
@@ -107,13 +107,13 @@ stable-only).
 | kitty | ✅ yes (from **base CentOS/EPEL**, not a Dux repo) | `kitty-0.47.1-3.el10_3.x86_64` — already packaged upstream, no porting needed |
 | alacritty | ❌ no | Not found in any enabled repo |
 | ghostty | ❌ no | Confirms PLAN.md: needs Zig toolchain, no prebuilt el10 package found |
-| material-symbols-fonts | ✅ yes | `1.0-1.el10.noarch`, from `avengemedia/danklinux` |
+| material-symbols-fonts | ✅ yes | `1.0-1.el10.noarch`, from `duxlabs/dux` |
 | qt6ct-kde | ❌ no (as separate package) | Only plain `qt6ct-0.11-10.20250907git23a985f.el10_2` exists (no `-kde` subpackage variant found) — needs check whether KDE-style plugin is bundled in base `qt6ct` on el10 or genuinely missing |
 | greetd | ❌ no | Confirmed absent — no package under this name or any `*greetd*` wildcard in any enabled repo (EPEL included). Matches PLAN.md blocker; still needs the "un-branched vs. real port" investigation |
 
 ## Summary / Findings so far
 - **Tiers 1–3 (minus the `dms` stable/`dms-git` naming question) are already fully solved
-  upstream** via the `avengemedia/danklinux` and `avengemedia/dms-git` COPR projects, which were
+  upstream** via the `duxlabs/dux` and `duxlabs/dms-git` COPR projects, which were
   already configured on `durin` before this session started. No net-new spec work needed there —
   just consume these repos.
 - The real open packaging work is concentrated in **Tier 4**: hyprland, mangowm, alacritty,
@@ -167,7 +167,7 @@ sudo dnf install --assumeno dms-greeter-git
 Both fail identically:
 ```
 Problem: cannot install the best candidate for the job
-  - nothing provides greetd needed by dms-greeter-<ver> from copr:...avengemedia:danklinux
+  - nothing provides greetd needed by dms-greeter-<ver> from copr:...duxlabs:dux
 ```
 Exhaustively confirmed greetd has **zero providers** in any enabled repo:
 ```
@@ -267,13 +267,13 @@ installed or verified by actually resolving against the live repo — it's spec-
 | **hyprland's dependency libs** | ⚠️ partial | `hyprutils`, `hyprlang`, `hyprgraphics`, `hyprwayland-scanner`, `hypridle`, `hyprlock` all have specs under `anda/desktops/hyprland/`. **`aquamarine` and `hyprcursor` were not found** (GitHub code search needs auth, so this is a directory-listing check, not exhaustive). |
 | **hyprland (core)** | ❌ **removed, deliberately** | Confirms/upgrades our earlier "real blocker" assessment. Terra's own removal PR (#17477) states plainly: *"they don't build anymore and we don't support hyprland as a WM, esp since the whole freedesktop thing"* — i.e. this isn't just "no el10 COPR target" (PLAN.md's original framing), it's an active third-party judgment that Hyprland is currently unbuildable/unsupportable, likely tied to Hyprland's own recent governance/licensing controversy. **Materially worse outlook than previously assessed** — worth deprioritizing rather than treating as "just needs 5 more lib ports." |
 | **niri (core)** | ⚠️ not found directly | Only accessory packages present (`iio-niri`, `niri-autostart`, `nirius`) under `anda/desktops/niri/` — no `niri.spec` itself in this listing. Moot either way since niri already installs cleanly via `yalter/niri` COPR (Step 5). |
-| **quickshell** | ❌ not present anywhere in Terra | Confirms `avengemedia/danklinux` COPR remains the only known source — no duplicate/competing effort to reconcile there. |
+| **quickshell** | ❌ not present anywhere in Terra | Confirms `duxlabs/dux` COPR remains the only known source — no duplicate/competing effort to reconcile there. |
 
 ### Strategic implication — needs a decision, not just more research
 Terra EL shipping a **complete, well-formed, Obsoletes-aware spec for DMS itself** changes the
 shape of this project's choices. Options, roughly in order of effort:
-1. **Ignore Terra, stay the current course** — keep consuming `avengemedia/danklinux` +
-   `avengemedia/dms-git` COPRs as planned. Simplest, matches PLAN.md as written, but means
+1. **Ignore Terra, stay the current course** — keep consuming `duxlabs/dux` +
+   `duxlabs/dms-git` COPRs as planned. Simplest, matches PLAN.md as written, but means
    duplicating packaging effort Terra has already done (and done arguably "more properly" —
    Fedora packaging conventions, Obsoletes chain, systemd user units).
 2. **Adopt Terra EL as a dependency source** — enable it (after resolving the GPG-check question)

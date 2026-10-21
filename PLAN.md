@@ -3,7 +3,7 @@
 ## Goal — the actual deliverable, stated plainly
 The end goal is **not** "have working spec files somewhere" — it's a real, live **COPR repo
 (`kmf/dux-ws`)** that any CentOS Stream 10 machine can add and install DMS + its dependency
-chain from, the same way one would `dnf copr enable avengemedia/danklinux` today. Concretely, done
+chain from, the same way one would `dnf copr enable duxlabs/dux` today. Concretely, done
 looks like:
 
 ```
@@ -70,7 +70,7 @@ below.
 
 ## Dependency Tree (build order)
 
-**Tier 1 — core libs — ✅ all available on el10 today** (via `avengemedia/danklinux` COPR)
+**Tier 1 — core libs — ✅ all available on el10 today** (via `duxlabs/dux` COPR)
 breakpad, cli11, cpptrace, matugen
 
 **Tier 2 — shell components (depend on Tier 1) — ✅ all available on el10 today** (same COPR)
@@ -80,7 +80,7 @@ quickshell / quickshell-git, dgop, danksearch, cliphist, dankcalendar-git
 dms, dms-greeter, dms-greeter-git all install and smoke-test clean (see `SETUP.md` Step 6).
 `dms-git` is **not a separate package name** — the binary RPM is always called `dms`; git-snapshot
 builds are just higher epoch/version of the same `dms` package, sourced from the
-`avengemedia/dms-git` COPR. No separate stable `avengemedia/dms` repo was found enabled or
+`duxlabs/dms-git` COPR. No separate stable `duxlabs/dms` repo was found enabled or
 populated on this host — see Open Question #2 below, now more concrete.
 
 **Tier 4 — runtime alternatives (not build-time deps of DMS itself)**
@@ -148,9 +148,9 @@ not an infrastructure blocker.
 ## Repos to Enable on `durin`
 - CRB (`dnf config-manager --set-enabled crb`) — ✅ enabled
 - epel-release-latest-10 — ✅ already present
-- COPR: avengemedia/danklinux — ✅ already enabled (covers Tiers 1–2 + dms-greeter/-git)
-- COPR: avengemedia/dms-git — ✅ already enabled (covers `dms`, incl. git-snapshot builds)
-- COPR: avengemedia/dms (stable) — ⚠️ **not found enabled, and no evidence it's populated for
+- COPR: duxlabs/dux — ✅ already enabled (covers Tiers 1–2 + dms-greeter/-git)
+- COPR: duxlabs/dms-git — ✅ already enabled (covers `dms`, incl. git-snapshot builds)
+- COPR: duxlabs/dms (stable) — ⚠️ **not found enabled, and no evidence it's populated for
   el10** — only `dms-git` provides the `dms` package on this host today. Needs confirming with
   upstream whether this repo exists/has el10 builds at all.
 - COPR: yalter/niri — ✅ already enabled, niri installs cleanly (see Known Blockers)
@@ -173,8 +173,8 @@ cleanly. Full detail in `TESTING.md`'s "Runtime bugs found and fixed" section.
 ## Open Questions
 1. CI trigger model — Packit/webhook on push to `dux-ws-copr`, or manual `copr-cli build` from `durin`? Decides how granular commit scoping needs to be.
 2. Do we ship both `dms` and `dms-git` for CentOS Stream 10, or stable-only first pass? **Narrowed
-   by findings above:** since only `avengemedia/dms-git` appears to actually exist/be populated for
-   el10 today (no stable `avengemedia/dms` el10 builds found), this may not be our choice to make
+   by findings above:** since only `duxlabs/dms-git` appears to actually exist/be populated for
+   el10 today (no stable `duxlabs/dms` el10 builds found), this may not be our choice to make
    yet — need to confirm with upstream whether a stable channel exists before deciding.
 3. Validation step — smoke-test on an actual CentOS Stream 10 desktop, or install-success only?
    **Partial answer:** did an install-success + `rpm -V` + `ldd` + binary-runs smoke test on
@@ -187,7 +187,7 @@ cleanly. Full detail in `TESTING.md`'s "Runtime bugs found and fixed" section.
 Dux Labs' own `dankinstall` (`curl -fsSL https://install.duxlabs.dev | sh`) doesn't support
 RHEL/CentOS/EPEL at all (Arch, Fedora, Ubuntu 26.04+, Debian 13+, openSUSE Tumbleweed, Gentoo only).
 `scripts/dux-install-el10.sh` is a flag-driven (non-interactive, v1) shell-script equivalent for
-el10: enables EPEL + CRB + `avengemedia/danklinux` + `avengemedia/dms-git` + `kmf/dux-ws`
+el10: enables EPEL + CRB + `duxlabs/dux` + `duxlabs/dms-git` + `kmf/dux-ws`
 (+ `yalter/niri` if niri is chosen), installs the Tier 1/2 deps, the chosen compositor
 (`niri`/`hyprland`/`miracle-wm`) and terminal (`ghostty`/`kitty`/`alacritty`), `dms` + `dms-greeter`,
 and enables the `dms` systemd user service. Refuses `--compositor hyprland` if
@@ -198,9 +198,9 @@ only dry-run tested so far.
 ## Related Links
 
 **Core Dux COPR**
-- https://copr.fedorainfracloud.org/coprs/avengemedia/danklinux/
-- https://copr.fedorainfracloud.org/coprs/avengemedia/dms-git/
-- https://copr.fedorainfracloud.org/coprs/avengemedia/dms
+- https://copr.fedorainfracloud.org/coprs/duxlabs/dux/
+- https://copr.fedorainfracloud.org/coprs/duxlabs/dms-git/
+- https://copr.fedorainfracloud.org/coprs/duxlabs/dms
 
 **Dux Wayland Compositor Links**
 - https://copr.fedorainfracloud.org/coprs/lionheartp/Hyprland/

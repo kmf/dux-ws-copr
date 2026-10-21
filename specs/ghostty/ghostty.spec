@@ -44,7 +44,7 @@ Source1:        https://release.files.ghostty.org/%{version}/ghostty-%{version}.
 # in %%prep with upstream's nix/build-support/fetch-zig-cache.sh, which needs network access at
 # build time: the kmf/dux-ws COPR project has enable_net=true. Approach adopted from Dux Labs'
 # own Ghostty packaging (duxlabs-dev/dux-packaging distro/fedora/ghostty/ghostty.spec, built in
-# avengemedia/danklinux with enable_net), replacing the offline zig vendor tarball (old Source2).
+# duxlabs/dux with enable_net), replacing the offline zig vendor tarball (old Source2).
 BuildRequires:  gettext
 BuildRequires:  gtk4-devel
 BuildRequires:  libadwaita-devel

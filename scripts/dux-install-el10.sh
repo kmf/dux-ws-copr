@@ -9,12 +9,12 @@
 # documented headless mode: `-c niri -t ghostty -y`.
 #
 # Sources used, per kmf/dux-ws-copr's PLAN.md/SETUP.md:
-#   - avengemedia/danklinux COPR : quickshell, matugen, cliphist, danksearch,
+#   - duxlabs/dux COPR : quickshell, matugen, cliphist, danksearch,
 #                                  dgop, dankcalendar-git, dms-greeter (all
 #                                  confirmed working on el10 unmodified)
-#   - avengemedia/dms-git COPR   : the `dms` package itself (only channel
+#   - duxlabs/dms-git COPR   : the `dms` package itself (only channel
 #                                  populated for el10 today - no stable
-#                                  avengemedia/dms el10 builds exist yet)
+#                                  duxlabs/dms el10 builds exist yet)
 #   - yalter/niri COPR           : niri (confirmed installs cleanly on el10
 #                                  as-is; we do not fork it)
 #   - kmf/dux-ws COPR           : everything we had to fork/build ourselves
@@ -54,8 +54,8 @@ DRY_RUN=0
 FORCE=0
 
 OUR_COPR="kmf/dux-ws"
-DANKLINUX_COPR="avengemedia/danklinux"
-DMS_COPR="avengemedia/dms-git"
+DANKLINUX_COPR="duxlabs/dux"
+DMS_COPR="duxlabs/dms-git"
 NIRI_COPR="yalter/niri"
 
 CORE_PACKAGES=(quickshell-git matugen cliphist danksearch dgop dankcalendar-git)
