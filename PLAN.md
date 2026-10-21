@@ -2,12 +2,12 @@
 
 ## Goal — the actual deliverable, stated plainly
 The end goal is **not** "have working spec files somewhere" — it's a real, live **COPR repo
-(`kmf/dux-ws-copr`)** that any CentOS Stream 10 machine can add and install DMS + its dependency
+(`kmf/dux-ws`)** that any CentOS Stream 10 machine can add and install DMS + its dependency
 chain from, the same way one would `dnf copr enable avengemedia/danklinux` today. Concretely, done
 looks like:
 
 ```
-dnf copr enable kmf/dux-ws-copr
+dnf copr enable kmf/dux-ws
 dnf install dms dms-greeter quickshell   # (and whatever else has been ported)
 ```
 actually working on a fresh CentOS Stream 10 box — not just "the SRPM built in a local mock chroot
@@ -24,7 +24,7 @@ Turning this into the actual artifact needs, roughly in order:
 1. ✅ **Done 2026-09-24**: pushed to a real `kmf/dux-ws-copr` GitHub repo — public, live at
    https://github.com/kmf/dux-ws-copr. (SSH auth to GitHub as `kmf` needed `github.com`'s host key
    added to `known_hosts` first — one-time setup, see SETUP.md Step 12.)
-2. Create the actual `kmf/dux-ws-copr` COPR project (copr.fedorainfracloud.org), pointed at that
+2. Create the actual `kmf/dux-ws` COPR project (copr.fedorainfracloud.org), pointed at that
    GitHub repo, targeting CentOS Stream 10 (+ EPEL as a dependency source, per below). `copr-cli`
    is now installed on `durin`, but **needs an API token tied to your Fedora Account** (generate at
    copr.fedorainfracloud.org/api/ once logged in, then `copr-cli` picks it up from
@@ -34,7 +34,7 @@ Turning this into the actual artifact needs, roughly in order:
    locally on `durin`'s mock — COPR's chroot/mock config should match, but this hasn't been
    confirmed with a real COPR build yet.
 5. ✅ **Done 2026-09-27, re-confirmed 2026-09-29–30 on genuinely separate machines**: validated the
-   actual `dnf copr enable kmf/dux-ws-copr && dnf install ...` flow — found and fixed a real
+   actual `dnf copr enable kmf/dux-ws && dnf install ...` flow — found and fixed a real
    chroot-detection bug in the process (see "Repos to Enable on `durin`" below). Re-validated on a
    clean `quay.io/centos/centos:stream10` container with zero state inherited from `durin`: `dnf
    copr enable` and the full published `dux-install-el10.sh` install both succeeded, every
@@ -157,13 +157,13 @@ not an infrastructure blocker.
 - (pending) COPR target for Hyprland once its own dependency chain (aquamarine, hyprutils,
   hyprlang, hyprcursor, hyprgraphics) is packaged for el10 — see Known Blockers
 
-**Real bug found and fixed 2026-09-27**: `sudo dnf copr enable kmf/dux-ws-copr` failed outright on
+**Real bug found and fixed 2026-09-27**: `sudo dnf copr enable kmf/dux-ws` failed outright on
 a freshly-tested el10 host with `Repository 'epel-10-x86_64' does not exist in project
-'kmf/dux-ws-copr'. Available repositories: 'centos-stream-10-x86_64'`. Root cause: a newer
+'kmf/dux-ws'. Available repositories: 'centos-stream-10-x86_64'`. Root cause: a newer
 `dnf-plugins-core` auto-detects the local Copr chroot name as `epel-10-x86_64` (Copr's generic
 "Enterprise Linux 10" chroot, covering RHEL/CentOS Stream/Rocky/Alma uniformly), not the
 CentOS-Stream-specific `centos-stream-10-x86_64` this project had only ever built for. Fixed by
-adding the `epel-10-x86_64` chroot (`copr-cli modify kmf/dux-ws-copr --chroot
+adding the `epel-10-x86_64` chroot (`copr-cli modify kmf/dux-ws --chroot
 centos-stream-10-x86_64 --chroot epel-10-x86_64`) and rebuilding all 33 packages for it in
 dependency order — Copr chroots don't share build artifacts with each other, so the new chroot
 started completely empty. All 33 succeeded (72/72 real builds total across both chroots now).
@@ -187,7 +187,7 @@ cleanly. Full detail in `TESTING.md`'s "Runtime bugs found and fixed" section.
 Dux Labs' own `dankinstall` (`curl -fsSL https://install.duxlabs.dev | sh`) doesn't support
 RHEL/CentOS/EPEL at all (Arch, Fedora, Ubuntu 26.04+, Debian 13+, openSUSE Tumbleweed, Gentoo only).
 `scripts/dux-install-el10.sh` is a flag-driven (non-interactive, v1) shell-script equivalent for
-el10: enables EPEL + CRB + `avengemedia/danklinux` + `avengemedia/dms-git` + `kmf/dux-ws-copr`
+el10: enables EPEL + CRB + `avengemedia/danklinux` + `avengemedia/dms-git` + `kmf/dux-ws`
 (+ `yalter/niri` if niri is chosen), installs the Tier 1/2 deps, the chosen compositor
 (`niri`/`hyprland`/`miracle-wm`) and terminal (`ghostty`/`kitty`/`alacritty`), `dms` + `dms-greeter`,
 and enables the `dms` systemd user service. Refuses `--compositor hyprland` if

@@ -6,11 +6,11 @@ Prepared in support of [Dux Labs/Dux Shell#3442 "Officially Support: RHEL 10"](h
 kernel 6.12.0-269.el10, actively used as a daily-driver desktop during this work — not a scratch
 VM spun up only to pass a build.
 
-**COPR project**: [kmf/dux-ws-copr](https://copr.fedorainfracloud.org/coprs/kmf/dux-ws-copr/),
+**COPR project**: [kmf/dux-ws](https://copr.fedorainfracloud.org/coprs/kmf/dux-ws/),
 building for two chroots: `centos-stream-10-x86_64` and `epel-10-x86_64`. Both are needed —
 newer `dnf-plugins-core` auto-detects a real CentOS Stream 10 host's Copr chroot as `epel-10-x86_64`
 (Copr's generic "Enterprise Linux 10" name, covering RHEL/CentOS Stream/Rocky/Alma uniformly), not
-`centos-stream-10-x86_64` — so `dnf copr enable kmf/dux-ws-copr` failed outright until the second
+`centos-stream-10-x86_64` — so `dnf copr enable kmf/dux-ws` failed outright until the second
 chroot was added and every package rebuilt for it (confirmed live: `hyprland`/`dms`/`cava` all now
 resolve and dry-run install cleanly from it).
 
@@ -227,8 +227,8 @@ and running, and the greeter is live on this exact machine as this report is wri
   [11035382](https://copr.fedorainfracloud.org/coprs/build/11035382) → `aquamarine`
   [11035384](https://copr.fedorainfracloud.org/coprs/build/11035384) → `hyprland`
   [11035386](https://copr.fedorainfracloud.org/coprs/build/11035386).
-- **`dnf copr enable kmf/dux-ws-copr` failed outright on a real, freshly-tested el10 host** with
-  `Repository 'epel-10-x86_64' does not exist in project 'kmf/dux-ws-copr'. Available
+- **`dnf copr enable kmf/dux-ws` failed outright on a real, freshly-tested el10 host** with
+  `Repository 'epel-10-x86_64' does not exist in project 'kmf/dux-ws'. Available
   repositories: 'centos-stream-10-x86_64'`. Root cause: a newer `dnf-plugins-core` auto-detects the
   local Copr chroot name as `epel-10-x86_64` (Copr's generic "Enterprise Linux 10" chroot, covering
   RHEL/CentOS Stream/Rocky/Alma uniformly) rather than the CentOS-Stream-specific
@@ -247,7 +247,7 @@ To check this repo actually works for someone with none of that, pulled a genuin
 public-facing flow a new user would:
 
 1. `dnf install dnf-plugins-core epel-release && crb enable`
-2. `dnf copr enable kmf/dux-ws-copr` — confirmed it auto-detects `epel-10-$basearch` here too (the
+2. `dnf copr enable kmf/dux-ws` — confirmed it auto-detects `epel-10-$basearch` here too (the
    same real bug fixed earlier), not just on `durin`.
 3. Downloaded `scripts/dux-install-el10.sh` from its actual public raw GitHub URL (not copied from
    the local filesystem) and ran it for real as an unprivileged sudo user:
@@ -434,7 +434,7 @@ session work) and the freshly-added `centos-stream-10-aarch64` chroot (empty `ad
 confirmed that gap directly, then confirmed a couple more failures (`rust-pam-sys`: missing
 `rust-packaging`; `mir`: missing `cargo-rpm-macros`/`gflags-devel`/`glog-devel`/`glm-devel`) all
 traced to the same missing-EPEL-and-CRB cause. Fixed with `copr-cli edit-chroot
-centos-stream-10-aarch64 --repos "<EPEL aarch64 URL> <CRB aarch64 URL> copr://kmf/dux-ws-copr"`,
+centos-stream-10-aarch64 --repos "<EPEL aarch64 URL> <CRB aarch64 URL> copr://kmf/dux-ws"`,
 matching the x86_64 chroot's existing config. (The `epel-10-x86_64`/`epel-10-aarch64` chroot family
 didn't need this - EPEL is already baked into "epel-10" chroots by design, only the plain
 "centos-stream-10" family needs it added manually.)
@@ -494,7 +494,7 @@ succeeded** (`centos-stream-10-x86_64` 37/37, `epel-10-x86_64` 37/37, `centos-st
 ## Reproducing this
 
 ```bash
-sudo dnf copr enable -y avengemedia/danklinux avengemedia/dms-git kmf/dux-ws-copr
+sudo dnf copr enable -y avengemedia/danklinux avengemedia/dms-git kmf/dux-ws
 curl -fsSL -o dux-install-el10.sh https://raw.githubusercontent.com/kmf/dux-ws-copr/main/scripts/dux-install-el10.sh
 chmod +x dux-install-el10.sh
 ./dux-install-el10.sh -c hyprland -t ghostty -y

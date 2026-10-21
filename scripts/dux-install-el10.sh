@@ -17,7 +17,7 @@
 #                                  avengemedia/dms el10 builds exist yet)
 #   - yalter/niri COPR           : niri (confirmed installs cleanly on el10
 #                                  as-is; we do not fork it)
-#   - kmf/dux-ws-copr           : everything we had to fork/build ourselves
+#   - kmf/dux-ws COPR           : everything we had to fork/build ourselves
 #                                  (hyprland, mir, miracle-wm, ghostty,
 #                                  greetd + its rust crate chain, cava, and
 #                                  the hyprland dependency chain)
@@ -53,7 +53,7 @@ ASSUME_YES=0
 DRY_RUN=0
 FORCE=0
 
-OUR_COPR="kmf/dux-ws-copr"
+OUR_COPR="kmf/dux-ws"
 DANKLINUX_COPR="avengemedia/danklinux"
 DMS_COPR="avengemedia/dms-git"
 NIRI_COPR="yalter/niri"
@@ -64,7 +64,7 @@ GREETER_PACKAGE="dms-greeter"
 # `dms doctor` optional-feature checks - kf6-kimageformats ships straight from
 # EPEL (dms doctor looks for the plain "kimageformats" name, but the actual
 # el10 package is kf6-kimageformats - KF6, distinct from the already-present
-# qt6-imageformats); cava is forked into kmf/dux-ws-copr (specs/cava/).
+# qt6-imageformats); cava is forked into the kmf/dux-ws COPR (specs/cava/).
 OPTIONAL_PACKAGES=(kf6-kimageformats cava)
 
 # ---------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 
   Compositors, terminal, and the full dependency chain — built with [COPR](https://copr.fedorainfracloud.org/)
 
-[![COPR Build](https://img.shields.io/badge/COPR-kmf%2Fdux--ws--copr-73ba25?labelColor=101418)](https://copr.fedorainfracloud.org/coprs/kmf/dux-ws-copr/)
+[![COPR Build](https://img.shields.io/badge/COPR-kmf%2Fdux--ws-73ba25?labelColor=101418)](https://copr.fedorainfracloud.org/coprs/kmf/dux-ws/)
 [![CentOS Stream 10](https://img.shields.io/badge/CentOS_Stream-10-262577?labelColor=101418)](https://www.centos.org/centos-stream/)
 [![License](https://img.shields.io/badge/license-various-b9c8da?labelColor=101418)](specs/NOTICE.md)
 
@@ -108,7 +108,7 @@ sudo dnf copr enable -y avengemedia/danklinux
 sudo dnf copr enable -y avengemedia/dms-git
 
 # 2. This repo, for everything Dux Labs doesn't build for el10
-sudo dnf copr enable -y kmf/dux-ws-copr
+sudo dnf copr enable -y kmf/dux-ws
 
 # 3. Core shell
 sudo dnf install -y quickshell-git matugen cliphist danksearch dgop dankcalendar-git dms
@@ -163,7 +163,7 @@ systemctl --user enable --now dms
 
 ## Build Status
 
-- **COPR**: [kmf/dux-ws-copr](https://copr.fedorainfracloud.org/coprs/kmf/dux-ws-copr/), targeting `centos-stream-10-x86_64`, `epel-10-x86_64` (the chroot a real `dnf copr enable` actually auto-detects on this distro family — see [TESTING.md](TESTING.md)), and their aarch64 equivalents
+- **COPR**: [kmf/dux-ws](https://copr.fedorainfracloud.org/coprs/kmf/dux-ws/), targeting `centos-stream-10-x86_64`, `epel-10-x86_64` (the chroot a real `dnf copr enable` actually auto-detects on this distro family — see [TESTING.md](TESTING.md)), and their aarch64 equivalents
 - **Dependencies (Tiers 1–3)**: [avengemedia/danklinux](https://copr.fedorainfracloud.org/coprs/avengemedia/danklinux/), [avengemedia/dms-git](https://copr.fedorainfracloud.org/coprs/avengemedia/dms-git/)
 - **niri**: [yalter/niri](https://copr.fedorainfracloud.org/coprs/yalter/niri/) (upstream, not built here)
 

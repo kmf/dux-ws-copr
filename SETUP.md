@@ -924,7 +924,7 @@ resolve what happens when a real user with wireplumber/ibus-libpinyin installs i
 **Open items for later, not blockers for what was asked**: the lua/wireplumber conflict (needs a
 decision), `mangowm` (still blocked on the pixman/xkbcommon system bump decision from Step 14, not
 touched further), `dms-greeter`'s real greetd chain already shipped, the actual `dnf copr enable
-kmf/dux-ws-copr && dnf install ...` end-user flow hasn't been validated on a machine other than
+kmf/dux-ws && dnf install ...` end-user flow hasn't been validated on a machine other than
 `durin` yet, and `copr-cli` package-tracking (SCM-based auto-rebuild-on-push) vs. manual
 `copr-cli build` per release hasn't been decided (Open Question 1 in PLAN.md).
 
@@ -1057,15 +1057,15 @@ Real COPR builds, in order: `hyprwayland-scanner` (11035382) -> `aquamarine` (11
 ## Step 24 — the epel-10-x86_64 chroot: a real `dnf copr enable` failure
 
 User reported an error running the install script: `Repository 'epel-10-x86_64' does not exist in
-project 'kmf/dux-ws-copr'. Available repositories: 'centos-stream-10-x86_64'`. Reproduced directly
-on `durin` with `sudo dnf copr enable -y kmf/dux-ws-copr`.
+project 'kmf/dux-ws'. Available repositories: 'centos-stream-10-x86_64'`. Reproduced directly
+on `durin` with `sudo dnf copr enable -y kmf/dux-ws`.
 
 Root cause: a newer `dnf-plugins-core` auto-detects the local Copr chroot name as `epel-10-x86_64`
 (Copr's generic "Enterprise Linux 10" chroot, covering RHEL/CentOS Stream/Rocky/Alma uniformly) -
 not `centos-stream-10-x86_64`, the only chroot this project had ever enabled. Confirmed by checking
 the actual `.repo` file `dnf copr enable` wrote: `baseurl=.../epel-10-$basearch/`.
 
-Fixed by adding the second chroot to the project itself (`copr-cli modify kmf/dux-ws-copr --chroot
+Fixed by adding the second chroot to the project itself (`copr-cli modify kmf/dux-ws --chroot
 centos-stream-10-x86_64 --chroot epel-10-x86_64` - passing both, since `modify --chroot` replaces
 the list rather than appending to it), then rebuilding **all 33 packages that existed at the time**
 for it, in the same dependency order used originally - Copr chroots don't share build artifacts
@@ -1147,7 +1147,7 @@ executing them. Concluded it should compile fine on aarch64 even though the feat
 makes semantic sense on x86_64 hosts, but didn't just assume - confirmed by the real build below
 instead.
 
-Added `centos-stream-10-aarch64` and `epel-10-aarch64` chroots (`copr-cli modify kmf/dux-ws-copr
+Added `centos-stream-10-aarch64` and `epel-10-aarch64` chroots (`copr-cli modify kmf/dux-ws
 --chroot <all four>`), then queued the full 37-package dependency chain (same order established for
 the `epel-10-x86_64` chroot earlier). **First attempt: near-total failure** - checked one log
 (`hyprwayland-scanner`) directly: `No matching package to install: 'cmake(pugixml)'`. Compared
@@ -1156,7 +1156,7 @@ the `epel-10-x86_64` chroot earlier). **First attempt: near-total failure** - ch
 the gap directly, then spot-checked two more failures (`rust-pam-sys`: missing `rust-packaging`;
 `mir`: missing `cargo-rpm-macros`/`gflags-devel`/`glog-devel`/`glm-devel`) to confirm it was the
 same root cause across the board, not several unrelated issues. Fixed with `copr-cli edit-chroot
-centos-stream-10-aarch64 --repos "<EPEL aarch64 URL> <CRB aarch64 URL> copr://kmf/dux-ws-copr"`
+centos-stream-10-aarch64 --repos "<EPEL aarch64 URL> <CRB aarch64 URL> copr://kmf/dux-ws"`
 (the `epel-10` chroot family already bakes EPEL in by design, so only the plain `centos-stream-10`
 family needed this).
 
