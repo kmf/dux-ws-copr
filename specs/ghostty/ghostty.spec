@@ -27,7 +27,7 @@
 
 Name:           ghostty
 Version:        1.3.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 # %%{evr} isn't a defined RPM macro on el10 (`rpm --eval '%%{evr}'` just echoes it back literally -
 # it's a newer Fedora-only convenience macro, not yet in el10's redhat-rpm-config/rpm). Discovered
 # the hard way: rpmbuild's "Possible unexpanded macro" warnings on every `%%{evr}` use throughout
@@ -40,15 +40,11 @@ License:        MIT AND MPL-2.0 AND OFL-1.1 AND (WTFPL OR CC0-1.0) AND Apache-2.
 URL:            https://ghostty.org/
 Source0:        https://release.files.ghostty.org/%{version}/ghostty-%{version}.tar.gz
 Source1:        https://release.files.ghostty.org/%{version}/ghostty-%{version}.tar.gz.minisig
-# Vendored Zig package cache — see SETUP.md Step 10 for exactly how this was generated
-# (`zig fetch` against every URL in build.zig.zon.txt, run with real network access outside the
-# sandboxed mock/COPR build, then the resulting cache's `p/` dir tarred up). Needed because
-# mock/COPR builds disable network during %%build/%%prep by design, but ghostty's upstream
-# `nix/build-support/fetch-zig-cache.sh` fetches its Zig dependencies (incl. one git dependency)
-# over the network at that point. Not hosted anywhere yet — currently a local file only
-# (/tmp/ghostty-1.3.1-zig-vendor.tar.zst on durin); needs to be uploaded to actual COPR source
-# storage (or regenerated in CI) before this spec can build outside this one mock test.
-Source2:        ghostty-%{version}-zig-vendor.tar.zst
+# Zig dependencies (incl. the iterm2_themes archive behind -Demit-themes=true) are fetched
+# in %%prep with upstream's nix/build-support/fetch-zig-cache.sh, which needs network access at
+# build time: the kmf/dux-ws COPR project has enable_net=true. Approach adopted from Dux Labs'
+# own Ghostty packaging (duxlabs-dev/dux-packaging distro/fedora/ghostty/ghostty.spec, built in
+# avengemedia/danklinux with enable_net), replacing the offline zig vendor tarball (old Source2).
 BuildRequires:  gettext
 BuildRequires:  gtk4-devel
 BuildRequires:  libadwaita-devel
@@ -212,14 +208,13 @@ This package contains the libraries and header files that are needed for develop
 /usr/bin/minisign -V -m %{SOURCE0} -x %{SOURCE1} -P %{public_key}
 %autosetup
 
-# Replaces upstream's `ZIG_GLOBAL_CACHE_DIR=... ./nix/build-support/fetch-zig-cache.sh`, which
-# requires network access unavailable in a mock/COPR build (see Source2 comment above).
-# NOTE: unlike Terra's original (which used their own Anda-specific `%%{zig_build_target}` macro
-# and renamed this dir to `zig-pkg` to match it), we leave it named `p` here — the official
-# zig-rpm-macros `%%zig_install` macro (via `_zig_package_dir` = `_zig_cache_dir/p`) expects that
-# exact name. Renaming it broke the build the first time this was tried (see SETUP.md Step 10).
+# Fetch every Zig dependency listed in build.zig.zon.txt into the zig cache with upstream's
+# helper (network required - see the Sources comment; credit: duxlabs-dev/dux-packaging).
+# The cache dir stays `p` under %%{_zig_cache_dir}: zig-rpm-macros' %%zig_install (via
+# `_zig_package_dir` = `_zig_cache_dir/p`) expects that exact name (see SETUP.md Step 10).
 mkdir -p "%{_zig_cache_dir}"
-tar --zstd -xf %{SOURCE2} -C "%{_zig_cache_dir}"
+ZIG_GLOBAL_CACHE_DIR="%{_zig_cache_dir}" sh ./nix/build-support/fetch-zig-cache.sh
+test -d "%{_zig_cache_dir}/p"
 
 %build
 
@@ -231,7 +226,7 @@ tar --zstd -xf %{SOURCE2} -C "%{_zig_cache_dir}"
 %global _zig_release_mode fast
 %global zig_install_options -Dversion-string="%{version}" -Dstrip=false -Dpie=true -Demit-docs -Demit-themes=true
 # el10's harfbuzz-devel (8.4.0) is too old for ghostty's bindings, which expect the newer
-# harfbuzz it vendors itself (11.0.0, fetched into the Source2 vendor cache above) - discovered
+# harfbuzz it vendors itself (11.0.0, fetched into the zig cache in %%prep) - discovered
 # via a real build failure (`error: ... has no member named 'HB_BUFFER_CLUSTER_LEVEL_GRAPHEMES'`).
 # `-fno-sys=<name>` is Zig's build-runner flag (see /usr/lib/zig/compiler/build_runner.zig) to
 # force building the vendored copy of a dependency instead of linking the system one.
@@ -339,6 +334,10 @@ rm -rf %{buildroot}%{_datadir}/terminfo/g/%{name}
 %{_datadir}/pkgconfig/libghostty-vt.pc
 
 %changelog
+* Wed Oct 21 2026 Karl Fischer <karl@obsidian.co.za> - 1.3.1-5
+- Fetch zig dependencies in %%prep with fetch-zig-cache.sh (network-enabled COPR) instead of
+  the offline vendor tarball, following duxlabs-dev/dux-packaging; all themes still shipped
+
 * Wed Oct 14 2026 Karl Fischer <karl@obsidian.co.za> - 1.3.1-4
 - Ship ghostty's bundled themes (-Demit-themes=true); the iterm2_themes
   dependency is already in the offline zig vendor archive (Source2)
